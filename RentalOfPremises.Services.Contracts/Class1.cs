@@ -1,0 +1,7 @@
+﻿namespace RentalOfPremises.Services.Contracts
+{
+    public class Class1
+    {
+
+    }
+}
