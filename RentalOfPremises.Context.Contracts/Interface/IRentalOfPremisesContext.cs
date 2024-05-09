@@ -6,7 +6,7 @@ namespace RentalOfPremises.Context.Contracts.Interface
     public interface IRentalOfPremisesContext
     {
         /// <summary> Список <inheritdoc cref="Contract"/> </summary>
-        DbSet<Contract> Сontracts { get; }
+        DbSet<Contract> Contracts { get; }
 
         /// <summary> Список <inheritdoc cref="PaymentInvoice"/> </summary>
         DbSet<PaymentInvoice> PaymentInvoices { get; }
@@ -21,6 +21,6 @@ namespace RentalOfPremises.Context.Contracts.Interface
         DbSet<Tenant> Tenants { get; }
 
         /// <summary> Список <inheritdoc cref="User"/> </summary>
-        DbSet<User> Users { get;}
+        DbSet<User> Users { get; }
     }
 }

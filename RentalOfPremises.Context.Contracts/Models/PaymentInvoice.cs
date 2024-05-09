@@ -48,7 +48,7 @@
         /// <summary>
         /// Идентификатор текущего прейскуранта
         /// </summary>
-        public int PriceId { get; set; }
+        public Guid PriceId { get; set; }
 
         /// <summary>
         /// Сущность прейскуранта
