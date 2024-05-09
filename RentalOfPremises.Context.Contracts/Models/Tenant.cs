@@ -1,4 +1,6 @@
-﻿namespace RentalOfPremises.Context.Contracts.Models
+﻿using RentalOfPremises.Context.Contracts.Enums;
+
+namespace RentalOfPremises.Context.Contracts.Models
 {
     /// <summary>
     /// Сущность арендатора
@@ -13,12 +15,12 @@
         /// <summary>
         /// Имя директора
         /// </summary>
-        public string Name { get; set; } = null!;
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Фамилия директора
         /// </summary>
-        public string Surname { get; set; } = null!;
+        public string Surname { get; set; } = string.Empty;
 
         /// <summary>
         /// Отчество директора
@@ -28,57 +30,57 @@
         /// <summary>
         /// Тип организации
         /// </summary>
-        public int Type { get; set; }
+        public TenantTypes Type { get; set; }
 
         /// <summary>
         /// ИНН организации
         /// </summary>
-        public long Inn { get; set; }
+        public string Inn { get; set; } = string.Empty;
 
         /// <summary>
         /// КПП организации
         /// </summary>
-        public long? Kpp { get; set; }
+        public string? Kpp { get; set; }
 
         /// <summary>
-        /// Юридический адресс организации
+        /// Юридический адрес организации
         /// </summary>
-        public string? Address { get; set; }
+        public string Address { get; set; } = string.Empty;
 
         /// <summary>
         /// Номер расчётного счёта
         /// </summary>
-        public string? Rs { get; set; }
+        public string Rs { get; set; } = string.Empty;
 
         /// <summary>
         /// Номер корреспондентского счёта
         /// </summary>
-        public string? Ks { get; set; }
+        public string Ks { get; set; } = string.Empty;
 
         /// <summary>
         /// Банковский идентификационный код (БИК)
         /// </summary>
-        public string? Bik { get; set; }
+        public string Bik { get; set; } = string.Empty;
 
         /// <summary>
         /// Полное наименование банка
         /// </summary>
-        public string? Bank { get; set; }
+        public string Bank { get; set; } = string.Empty;
 
         /// <summary>
         /// Общероссийский классификатор организаций и предприятий
         /// </summary>
-        public long? Okpo { get; set; }
+        public string Okpo { get; set; } = string.Empty;
 
         /// <summary>
         /// Основной государственный регистрационный номер
         /// </summary>
-        public long? Ogrn { get; set; }
+        public string Ogrn { get; set; } = string.Empty;
 
         /// <summary>
         /// Телефон
         /// </summary>
-        public string? Telephone { get; set; }
+        public string Telephone { get; set; } = string.Empty;
 
         /// <summary>
         /// Электронная почта
