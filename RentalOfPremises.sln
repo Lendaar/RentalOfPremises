@@ -3,35 +3,40 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalOfPremises.Api", "RentalOfPremises\RentalOfPremises.Api.csproj", "{D506F30B-0FA2-4662-B3BF-879DEA3536B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentalOfPremises.Api", "RentalOfPremises\RentalOfPremises.Api.csproj", "{D506F30B-0FA2-4662-B3BF-879DEA3536B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalOfPremises.Api.Tests", "RentalOfPremises.Api.Tests\RentalOfPremises.Api.Tests.csproj", "{26E75932-011F-489D-B867-E73227C0380B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentalOfPremises.Api.Tests", "RentalOfPremises.Api.Tests\RentalOfPremises.Api.Tests.csproj", "{26E75932-011F-489D-B867-E73227C0380B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalOfPremises.Common.Entity", "RentalOfPremises.Common.Entity\RentalOfPremises.Common.Entity.csproj", "{9BD7964A-02E8-471A-AE4B-C42AC4602769}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentalOfPremises.Common.Entity", "RentalOfPremises.Common.Entity\RentalOfPremises.Common.Entity.csproj", "{9BD7964A-02E8-471A-AE4B-C42AC4602769}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalOfPremises.Common", "RentalOfPremises.Common\RentalOfPremises.Common.csproj", "{56CB957B-185B-450E-9824-39DB82FB263C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentalOfPremises.Common", "RentalOfPremises.Common\RentalOfPremises.Common.csproj", "{56CB957B-185B-450E-9824-39DB82FB263C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalOfPremises.Context.Contracts", "RentalOfPremises.Context.Contracts\RentalOfPremises.Context.Contracts.csproj", "{239FFE3A-D665-4DA0-97CE-A154CBDFD3DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentalOfPremises.Context.Contracts", "RentalOfPremises.Context.Contracts\RentalOfPremises.Context.Contracts.csproj", "{239FFE3A-D665-4DA0-97CE-A154CBDFD3DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalOfPremises.Context.Tests", "RentalOfPremises.Context.Tests\RentalOfPremises.Context.Tests.csproj", "{A9EDBBE7-B966-4D87-A6B7-B6B6488625A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentalOfPremises.Context.Tests", "RentalOfPremises.Context.Tests\RentalOfPremises.Context.Tests.csproj", "{A9EDBBE7-B966-4D87-A6B7-B6B6488625A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalOfPremises.Context", "RentalOfPremises.Context\RentalOfPremises.Context.csproj", "{A195673A-3A07-4513-BD69-56F2D4672D06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentalOfPremises.Context", "RentalOfPremises.Context\RentalOfPremises.Context.csproj", "{A195673A-3A07-4513-BD69-56F2D4672D06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalOfPremises.ContextConfiguration", "RentalOfPremises.ContextConfiguration\RentalOfPremises.ContextConfiguration.csproj", "{E0D34698-47BB-4B87-972C-759BAB5FD4EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentalOfPremises.ContextConfiguration", "RentalOfPremises.ContextConfiguration\RentalOfPremises.ContextConfiguration.csproj", "{E0D34698-47BB-4B87-972C-759BAB5FD4EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalOfPremises.Repositories.Contracts", "RentalOfPremises.Repositories.Contracts\RentalOfPremises.Repositories.Contracts.csproj", "{68C351E0-3BDF-4928-8D33-47A23EEA73A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentalOfPremises.Repositories.Contracts", "RentalOfPremises.Repositories.Contracts\RentalOfPremises.Repositories.Contracts.csproj", "{68C351E0-3BDF-4928-8D33-47A23EEA73A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalOfPremises.Repositories.Tests", "RentalOfPremises.Repositories.Tests\RentalOfPremises.Repositories.Tests.csproj", "{E63D1831-A20B-4C36-8D63-FD26ED5A2B40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentalOfPremises.Repositories.Tests", "RentalOfPremises.Repositories.Tests\RentalOfPremises.Repositories.Tests.csproj", "{E63D1831-A20B-4C36-8D63-FD26ED5A2B40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalOfPremises.Repositories", "RentalOfPremises.Repositories\RentalOfPremises.Repositories.csproj", "{8BA59C83-141D-40E5-B6BF-44A33693AA9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentalOfPremises.Repositories", "RentalOfPremises.Repositories\RentalOfPremises.Repositories.csproj", "{8BA59C83-141D-40E5-B6BF-44A33693AA9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalOfPremises.Services", "RentalOfPremises.Services\RentalOfPremises.Services.csproj", "{1929C87A-B0E6-432F-8E0D-01ABDBF94527}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentalOfPremises.Services", "RentalOfPremises.Services\RentalOfPremises.Services.csproj", "{1929C87A-B0E6-432F-8E0D-01ABDBF94527}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalOfPremises.Services.Tests", "RentalOfPremises.Services.Tests\RentalOfPremises.Services.Tests.csproj", "{84D2FC9A-2708-4174-AD0C-C4CADD1B2C98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentalOfPremises.Services.Tests", "RentalOfPremises.Services.Tests\RentalOfPremises.Services.Tests.csproj", "{84D2FC9A-2708-4174-AD0C-C4CADD1B2C98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalOfPremises.Services.Contracts", "RentalOfPremises.Services.Contracts\RentalOfPremises.Services.Contracts.csproj", "{AA239705-3439-4FE8-A940-5B3AC8253FE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentalOfPremises.Services.Contracts", "RentalOfPremises.Services.Contracts\RentalOfPremises.Services.Contracts.csproj", "{AA239705-3439-4FE8-A940-5B3AC8253FE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalOfPremises.Shared", "RentalOfPremises.Shared\RentalOfPremises.Shared.csproj", "{4FC67B07-1CFB-4B8F-98C8-4D34B44CDF53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentalOfPremises.Shared", "RentalOfPremises.Shared\RentalOfPremises.Shared.csproj", "{4FC67B07-1CFB-4B8F-98C8-4D34B44CDF53}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EB77EF57-D921-4A0A-951A-85077D67C91F}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,7 +1,6 @@
 ﻿namespace RentalOfPremises.ContextConfiguration
 {
-    public class Class1
+    public interface IContextConfigurationAnchor
     {
-
     }
 }
