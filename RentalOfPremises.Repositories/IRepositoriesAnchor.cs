@@ -1,7 +1,6 @@
 ﻿namespace RentalOfPremises.Repositories
 {
-    public class Class1
+    public interface IRepositoriesAnchor
     {
-
     }
 }
