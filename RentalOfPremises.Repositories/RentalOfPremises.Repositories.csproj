@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RentalOfPremises.Common.Entity\RentalOfPremises.Common.Entity.csproj" />
+    <ProjectReference Include="..\RentalOfPremises.Repositories.Contracts\RentalOfPremises.Repositories.Contracts.csproj" />
+    <ProjectReference Include="..\RentalOfPremises.Shared\RentalOfPremises.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
