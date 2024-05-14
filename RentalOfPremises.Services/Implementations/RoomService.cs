@@ -55,7 +55,7 @@ namespace RentalOfPremises.Services.Implementations
                 SquareRoom = room.SquareRoom,
                 TypeRoom = (PremisesTypes)room.TypeRoom,
                 Price = room.Price,
-                Occupied = room.Occupied,
+                Occupied = false,
             };
             roomWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
