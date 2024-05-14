@@ -6,4 +6,20 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.EnumMapping" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RentalOfPremises.Common.Entity\RentalOfPremises.Common.Entity.csproj" />
+    <ProjectReference Include="..\RentalOfPremises.Common\RentalOfPremises.Common.csproj" />
+    <ProjectReference Include="..\RentalOfPremises.Context.Contracts\RentalOfPremises.Context.Contracts.csproj" />
+    <ProjectReference Include="..\RentalOfPremises.Repositories.Contracts\RentalOfPremises.Repositories.Contracts.csproj" />
+    <ProjectReference Include="..\RentalOfPremises.Repositories\RentalOfPremises.Repositories.csproj" />
+    <ProjectReference Include="..\RentalOfPremises.Services.Contracts\RentalOfPremises.Services.Contracts.csproj" />
+    <ProjectReference Include="..\RentalOfPremises.Shared\RentalOfPremises.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -20,8 +20,8 @@ namespace RentalOfPremises.ContextConfiguration
             builder.Property(x => x.PassLegСar).IsRequired();
             builder.Property(x => x.PassGrСar).IsRequired();
             builder.HasIndex(x => x.NumberContract)
-                .HasFilter($"{nameof(PaymentInvoice.DeletedAt)} is null")
-                .HasDatabaseName($"IX_{nameof(PaymentInvoice)}_{nameof(PaymentInvoice.NumberContract)}");
+                   .HasFilter($"{nameof(PaymentInvoice.DeletedAt)} is null")
+                   .HasDatabaseName($"IX_{nameof(PaymentInvoice)}_{nameof(PaymentInvoice.NumberContract)}");
         }
     }
 }
