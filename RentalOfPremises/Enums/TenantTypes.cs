@@ -1,7 +1,7 @@
 ﻿namespace RentalOfPremises.Api.Enums
 {
     /// <summary>
-    /// Роли пользователей
+    /// Тип организации
     /// </summary>
     public enum TenantTypes
     {
