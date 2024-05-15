@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
-using AutoMapper.Execution;
 using RentalOfPremises.Common.Entity.InterfaceDB;
 using RentalOfPremises.Context.Contracts.Models;
 using RentalOfPremises.Repositories.Contracts;
 using RentalOfPremises.Repositories.Contracts.Interface;
 using RentalOfPremises.Services.Anchors;
+using RentalOfPremises.Services.Contracts.Exceptions;
 using RentalOfPremises.Services.Contracts.Interface;
 using RentalOfPremises.Services.Contracts.Models;
 using RentalOfPremises.Services.Contracts.RequestModels;
-using System.Xml;
 
 namespace RentalOfPremises.Services.Implementations
 {
@@ -61,7 +60,7 @@ namespace RentalOfPremises.Services.Implementations
             var item = await paymentInvoiceReadRepository.GetByIdAsync(id, cancellationToken);
             if (item == null)
             {
-                throw new Exception();
+                throw new RentalOfPremisesEntityNotFoundException<PaymentInvoice>(id);
             }
             var price = await priceReadRepository.GetByIdAsync(item.PriceId, cancellationToken);
             var payment = mapper.Map<PaymentInvoiceModel>(item);
@@ -97,7 +96,7 @@ namespace RentalOfPremises.Services.Implementations
 
             if (targetPaymentItem == null)
             {
-                throw new Exception();
+                throw new RentalOfPremisesEntityNotFoundException<PaymentInvoice>(source.Id);
             }
 
             targetPaymentItem.PeriodPayment = source.PeriodPayment;
@@ -121,11 +120,11 @@ namespace RentalOfPremises.Services.Implementations
             var targetPaymentItem = await paymentInvoiceReadRepository.GetByIdAsync(id, cancellationToken);
             if (targetPaymentItem == null)
             {
-                throw new Exception();
+                throw new RentalOfPremisesEntityNotFoundException<PaymentInvoice>(id);
             }
             if (targetPaymentItem.DeletedAt.HasValue)
             {
-                throw new Exception();
+                throw new RentalOfPremisesInvalidOperationException($"Счет на оплату с идентификатором {id} уже удален");
             }
             paymentInvoiceWriteRepository.Delete(targetPaymentItem);
             await unitOfWork.SaveChangesAsync(cancellationToken);

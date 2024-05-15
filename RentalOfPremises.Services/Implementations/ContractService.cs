@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
-using AutoMapper.Execution;
 using RentalOfPremises.Common.Entity.InterfaceDB;
 using RentalOfPremises.Context.Contracts.Models;
 using RentalOfPremises.Repositories.Contracts;
 using RentalOfPremises.Repositories.Contracts.Interface;
 using RentalOfPremises.Services.Anchors;
+using RentalOfPremises.Services.Contracts.Exceptions;
 using RentalOfPremises.Services.Contracts.Interface;
 using RentalOfPremises.Services.Contracts.Models;
 using RentalOfPremises.Services.Contracts.RequestModels;
-using System.Xml;
 
 namespace RentalOfPremises.Services.Implementations
 {
@@ -72,7 +71,7 @@ namespace RentalOfPremises.Services.Implementations
             var item = await contractReadRepository.GetByIdAsync(id, cancellationToken);
             if (item == null)
             {
-                throw new Exception();
+                throw new RentalOfPremisesEntityNotFoundException<Contract>(id);
             }
             var room = await roomReadRepository.GetByIdAsync(item.RoomId, cancellationToken);
             var tenant = await tenantReadRepository.GetByIdAsync(item.TenantId, cancellationToken);
@@ -117,7 +116,7 @@ namespace RentalOfPremises.Services.Implementations
 
             if (targetContractItem == null)
             {
-                throw new Exception();
+                throw new RentalOfPremisesEntityNotFoundException<Contract>(source.Id);
             }
 
             targetContractItem.Payment = source.Payment;
@@ -143,11 +142,11 @@ namespace RentalOfPremises.Services.Implementations
             var targetContractItem = await contractReadRepository.GetByIdAsync(id, cancellationToken);
             if (targetContractItem == null)
             {
-                throw new Exception();
+                throw new RentalOfPremisesEntityNotFoundException<Contract>(id);
             }
             if (targetContractItem.DeletedAt.HasValue)
             {
-                throw new Exception();
+                throw new RentalOfPremisesInvalidOperationException($"Договор аренды с идентификатором {id} уже удален");
             }
             contractWriteRepository.Delete(targetContractItem);
             await unitOfWork.SaveChangesAsync(cancellationToken);
