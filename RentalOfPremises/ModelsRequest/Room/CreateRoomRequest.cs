@@ -28,11 +28,6 @@ namespace RentalOfPremises.Api.ModelsRequest.Room
         public PremisesTypes TypeRoom { get; set; } = PremisesTypes.OwnNonResidentialPremises;
 
         /// <summary>
-        /// Цена аренды
-        /// </summary>
-        public double Price { get; set; }
-
-        /// <summary>
         /// Занято ли помещение
         /// </summary>
         public bool Occupied { get; set; } = false;

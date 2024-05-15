@@ -221,9 +221,6 @@ namespace RentalOfPremises.Context.Migrations
                     b.Property<bool>("Occupied")
                         .HasColumnType("bit");
 
-                    b.Property<double?>("Price")
-                        .HasColumnType("float");
-
                     b.Property<double>("SquareRoom")
                         .HasColumnType("float");
 

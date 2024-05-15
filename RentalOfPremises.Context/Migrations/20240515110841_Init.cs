@@ -40,7 +40,6 @@ namespace RentalOfPremises.Context.Migrations
                     NumberRoom = table.Column<int>(type: "int", nullable: false),
                     SquareRoom = table.Column<double>(type: "float", nullable: false),
                     TypeRoom = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: true),
                     Occupied = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),

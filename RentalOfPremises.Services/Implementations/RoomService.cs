@@ -55,7 +55,6 @@ namespace RentalOfPremises.Services.Implementations
                 NumberRoom = room.NumberRoom,
                 SquareRoom = room.SquareRoom,
                 TypeRoom = (PremisesTypes)room.TypeRoom,
-                Price = room.Price,
                 Occupied = false,
             };
             roomWriteRepository.Add(item);
@@ -75,7 +74,6 @@ namespace RentalOfPremises.Services.Implementations
             targetRoom.NumberRoom = source.NumberRoom;
             targetRoom.SquareRoom = source.SquareRoom;
             targetRoom.TypeRoom = (PremisesTypes)source.TypeRoom;
-            targetRoom.Price = source.Price;
             targetRoom.Occupied = source.Occupied;
 
             roomWriteRepository.Update(targetRoom);
