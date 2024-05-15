@@ -31,11 +31,6 @@
         public string TypeRoom { get; set; } = string.Empty;
 
         /// <summary>
-        /// Цена аренды
-        /// </summary>
-        public double Price { get; set; }
-
-        /// <summary>
         /// Занято ли помещение
         /// </summary>
         public bool Occupied { get; set; }

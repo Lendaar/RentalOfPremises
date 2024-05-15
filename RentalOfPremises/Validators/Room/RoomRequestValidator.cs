@@ -37,7 +37,6 @@ namespace RentalOfPremises.Api.Validators.Room
 
             RuleFor(x => x.TypeRoom)
                 .NotNull()
-                .NotEmpty()
                 .WithMessage("Тип помещения не должен быть пустой или null");
         }
     }
