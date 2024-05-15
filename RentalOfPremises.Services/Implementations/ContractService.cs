@@ -3,6 +3,7 @@ using RentalOfPremises.Common.Entity.InterfaceDB;
 using RentalOfPremises.Context.Contracts.Models;
 using RentalOfPremises.Repositories.Contracts;
 using RentalOfPremises.Repositories.Contracts.Interface;
+using RentalOfPremises.Repositories.Implementations;
 using RentalOfPremises.Services.Anchors;
 using RentalOfPremises.Services.Contracts.Exceptions;
 using RentalOfPremises.Services.Contracts.Interface;
@@ -17,6 +18,7 @@ namespace RentalOfPremises.Services.Implementations
         private readonly IContractWriteRepository contractWriteRepository;
         private readonly ITenantReadRepository tenantReadRepository;
         private readonly IRoomReadRepository roomReadRepository;
+        private readonly IRoomWriteRepository roomWriteRepository;
         private readonly IMapper mapper;
         private readonly IUnitOfWork unitOfWork;
 
@@ -24,12 +26,14 @@ namespace RentalOfPremises.Services.Implementations
             ITenantReadRepository tenantReadRepository,
             IRoomReadRepository roomReadRepository,
             IContractWriteRepository contractWriteRepository,
+            IRoomWriteRepository roomWriteRepository,
             IUnitOfWork unitOfWork,
             IMapper mapper)
         {
             this.contractReadRepository = contractReadRepository;
             this.tenantReadRepository = tenantReadRepository;
             this.roomReadRepository = roomReadRepository;
+            this.roomWriteRepository = roomWriteRepository;
             this.contractWriteRepository = contractWriteRepository;
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
@@ -87,7 +91,7 @@ namespace RentalOfPremises.Services.Implementations
         {
             var contracts = await contractReadRepository.GetAllAsync(cancellationToken);
             var newNumber = 1;
-            if (contracts != null)
+            if (contracts.Count != 0)
             {
                 var contractWithMaxNumber = contracts.MaxBy(x => x.Number);
                 newNumber = contractWithMaxNumber.Number + 1;
@@ -104,6 +108,10 @@ namespace RentalOfPremises.Services.Implementations
                 DateEnd = contract.DateEnd,
                 Archive = false
             };
+
+            var room = await roomReadRepository.GetByIdAsync(contract.Room, cancellationToken);
+            room.Occupied = true;
+            roomWriteRepository.Update(room);
 
             contractWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
