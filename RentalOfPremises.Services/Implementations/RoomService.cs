@@ -88,10 +88,6 @@ namespace RentalOfPremises.Services.Implementations
             {
                 throw new RentalOfPremisesEntityNotFoundException<Room>(id);
             }
-            if (targetRoom.DeletedAt.HasValue)
-            {
-                throw new RentalOfPremisesInvalidOperationException($"Помещение с идентификатором {id} уже удален");
-            }
             roomWriteRepository.Delete(targetRoom);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }

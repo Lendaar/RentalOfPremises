@@ -89,10 +89,6 @@ namespace RentalOfPremises.Services.Implementations
             {
                 throw new RentalOfPremisesEntityNotFoundException<Price>(id);
             }
-            if (targetCourse.DeletedAt.HasValue)
-            {
-                throw new RentalOfPremisesInvalidOperationException($"Прейскурант с идентификатором {id} уже удален");
-            }
             priceWriteRepository.Delete(targetCourse);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }

@@ -84,10 +84,6 @@ namespace RentalOfPremises.Services.Implementations
             {
                 throw new RentalOfPremisesEntityNotFoundException<User>(id);
             }
-            if (targetUser.DeletedAt.HasValue)
-            {
-                throw new RentalOfPremisesInvalidOperationException($"Пользователь с идентификатором {id} уже удален");
-            }
             userWriteRepository.Delete(targetUser);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }

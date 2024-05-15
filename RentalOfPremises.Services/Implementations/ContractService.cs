@@ -152,10 +152,6 @@ namespace RentalOfPremises.Services.Implementations
             {
                 throw new RentalOfPremisesEntityNotFoundException<Contract>(id);
             }
-            if (targetContractItem.DeletedAt.HasValue)
-            {
-                throw new RentalOfPremisesInvalidOperationException($"Договор аренды с идентификатором {id} уже удален");
-            }
             contractWriteRepository.Delete(targetContractItem);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }

@@ -122,10 +122,6 @@ namespace RentalOfPremises.Services.Implementations
             {
                 throw new RentalOfPremisesEntityNotFoundException<PaymentInvoice>(id);
             }
-            if (targetPaymentItem.DeletedAt.HasValue)
-            {
-                throw new RentalOfPremisesInvalidOperationException($"Счет на оплату с идентификатором {id} уже удален");
-            }
             paymentInvoiceWriteRepository.Delete(targetPaymentItem);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }

@@ -110,10 +110,6 @@ namespace RentalOfPremises.Services.Implementations
             {
                 throw new RentalOfPremisesEntityNotFoundException<Tenant>(id);
             }
-            if (targetTenant.DeletedAt.HasValue)
-            {
-                throw new RentalOfPremisesInvalidOperationException($"Арендатор с идентификатором {id} уже удален");
-            }
             tenantWriteRepository.Delete(targetTenant);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
