@@ -52,7 +52,7 @@ namespace RentalOfPremises.Services.Implementations
             {
                 Id = Guid.NewGuid(),
                 LoginUser = user.LoginUser,
-                PasswordUser = user.PasswordUser,
+                PasswordUser = BCrypt.Net.BCrypt.EnhancedHashPassword(user.PasswordUser, BCrypt.Net.HashType.SHA512),
                 RoleUser = (RoleTypes)user.RoleUser,
             };
             userWriteRepository.Add(item);
@@ -69,7 +69,7 @@ namespace RentalOfPremises.Services.Implementations
             }
 
             targetUser.LoginUser = source.LoginUser;
-            targetUser.PasswordUser = source.PasswordUser;
+            targetUser.PasswordUser = BCrypt.Net.BCrypt.EnhancedHashPassword(source.PasswordUser, BCrypt.Net.HashType.SHA512);
             targetUser.RoleUser = (RoleTypes)source.RoleUser;
 
             userWriteRepository.Update(targetUser);
