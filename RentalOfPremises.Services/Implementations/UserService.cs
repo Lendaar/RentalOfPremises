@@ -9,6 +9,7 @@ using RentalOfPremises.Services.Contracts.Exceptions;
 using RentalOfPremises.Services.Contracts.Interface;
 using RentalOfPremises.Services.Contracts.Models;
 using RentalOfPremises.Services.Contracts.RequestModels;
+using RoleTypes_Services = RentalOfPremises.Services.Contracts.Enums.RoleTypes;
 
 namespace RentalOfPremises.Services.Implementations
 {
@@ -52,7 +53,7 @@ namespace RentalOfPremises.Services.Implementations
             {
                 Id = Guid.NewGuid(),
                 LoginUser = user.LoginUser,
-                PasswordUser = BCrypt.Net.BCrypt.EnhancedHashPassword(user.PasswordUser, BCrypt.Net.HashType.SHA512),
+                PasswordUser = BCrypt.Net.BCrypt.HashPassword(user.PasswordUser),
                 RoleUser = (RoleTypes)user.RoleUser,
             };
             userWriteRepository.Add(item);
@@ -69,7 +70,7 @@ namespace RentalOfPremises.Services.Implementations
             }
 
             targetUser.LoginUser = source.LoginUser;
-            targetUser.PasswordUser = BCrypt.Net.BCrypt.EnhancedHashPassword(source.PasswordUser, BCrypt.Net.HashType.SHA512);
+            targetUser.PasswordUser = BCrypt.Net.BCrypt.HashPassword(source.PasswordUser);
             targetUser.RoleUser = (RoleTypes)source.RoleUser;
 
             userWriteRepository.Update(targetUser);
@@ -86,6 +87,20 @@ namespace RentalOfPremises.Services.Implementations
             }
             userWriteRepository.Delete(targetUser);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+
+        async Task<UserModel?> IUserService.GetByLoginAndPasswordAsync(string login, string password, CancellationToken cancellationToken)
+        {
+            var result = await userReadRepository.AnyByLoginAsync(login, cancellationToken);
+            if (result == null)
+            {
+                return null;
+            }
+            if (BCrypt.Net.BCrypt.Verify(password, result.PasswordUser))
+            {
+                return mapper.Map<UserModel>(result);
+            }
+            return null;
         }
     }
 }

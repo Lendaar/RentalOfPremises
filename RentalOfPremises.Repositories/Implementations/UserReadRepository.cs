@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RentalOfPremises.Common.Entity.InterfaceDB;
 using RentalOfPremises.Common.Entity.Repositories;
+using RentalOfPremises.Context.Contracts.Enums;
 using RentalOfPremises.Context.Contracts.Models;
 using RentalOfPremises.Repositories.Contracts.Interface;
 
@@ -39,5 +40,11 @@ namespace RentalOfPremises.Repositories.Implementations
                  .NotDeletedAt()
                  .ById(id)
                  .AnyAsync(cancellationToken);
+
+        Task<User?> IUserReadRepository.AnyByLoginAsync(string login, CancellationToken cancellationToken)
+             => reader.Read<User>()
+                 .NotDeletedAt()
+                 .Where(x => x.LoginUser == login)
+                 .FirstOrDefaultAsync(cancellationToken);
     }
 }

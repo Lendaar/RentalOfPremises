@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using RentalOfPremises.Api.Infrastructure;
 using RentalOfPremises.Context;
@@ -5,8 +6,11 @@ using RentalOfPremises.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// аутентификация с помощью куки
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie();
 
+// Add services to the container.
 builder.Services.AddControllers(x =>
 {
     x.Filters.Add<RentalOfPremisesExceptionFilter>();
@@ -21,6 +25,8 @@ var conString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContextFactory<RentalOfPremisesContext>(options => options.UseSqlServer(conString), ServiceLifetime.Scoped);
 
 var app = builder.Build();
+
+app.UseAuthentication();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

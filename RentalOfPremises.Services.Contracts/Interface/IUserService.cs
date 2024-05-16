@@ -1,4 +1,5 @@
-﻿using RentalOfPremises.Services.Contracts.Models;
+﻿using RentalOfPremises.Services.Contracts.Enums;
+using RentalOfPremises.Services.Contracts.Models;
 using RentalOfPremises.Services.Contracts.RequestModels;
 
 namespace RentalOfPremises.Services.Contracts.Interface
@@ -29,5 +30,10 @@ namespace RentalOfPremises.Services.Contracts.Interface
         /// Удаляет существующую <see cref="UserModel"/>
         /// </summary>
         Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить <see cref="UserModel"/> по логину и паролю
+        /// </summary>
+        Task<UserModel?> GetByLoginAndPasswordAsync(string login, string password, CancellationToken cancellationToken);
     }
 }

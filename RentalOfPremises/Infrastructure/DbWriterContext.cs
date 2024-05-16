@@ -1,4 +1,6 @@
-﻿using RentalOfPremises.Common;
+﻿using System.Security.Claims;
+using System.Security.Principal;
+using RentalOfPremises.Common;
 using RentalOfPremises.Common.Entity.InterfaceDB;
 
 namespace RentalOfPremises.Api.Infrastructure
@@ -30,6 +32,6 @@ namespace RentalOfPremises.Api.Infrastructure
         public IDateTimeProvider DateTimeProvider { get; }
 
         /// <inheritdoc/>
-        public string UserName { get; } = "RentalOfPremises.Api";
+        public string UserName { get; } = ClassAuthorazation.Name ?? "RentalOfPremises.Api";
     }
 }
