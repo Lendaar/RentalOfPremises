@@ -1,5 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Security.Principal;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using RentalOfPremises.Common;
 using RentalOfPremises.Common.Entity.InterfaceDB;
 
@@ -32,6 +34,6 @@ namespace RentalOfPremises.Api.Infrastructure
         public IDateTimeProvider DateTimeProvider { get; }
 
         /// <inheritdoc/>
-        public string UserName { get; } = ClassAuthorazation.Name ?? "RentalOfPremises.Api";
+        public string UserName { get; } = "RentalOfPremises.Api";
     }
 }

@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using RentalOfPremises.Api.Infrastructure;
 using RentalOfPremises.Context;
@@ -6,10 +5,7 @@ using RentalOfPremises.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// аутентификация с помощью куки
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie();
-
+builder.Services.GetAuthentication();
 // Add services to the container.
 builder.Services.AddControllers(x =>
 {
@@ -27,8 +23,6 @@ builder.Services.AddDbContextFactory<RentalOfPremisesContext>(options => options
 
 var app = builder.Build();
 
-app.UseAuthentication();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -38,6 +32,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

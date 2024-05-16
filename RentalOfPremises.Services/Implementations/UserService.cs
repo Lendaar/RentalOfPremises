@@ -56,7 +56,7 @@ namespace RentalOfPremises.Services.Implementations
                 PasswordUser = BCrypt.Net.BCrypt.HashPassword(user.PasswordUser),
                 RoleUser = (RoleTypes)user.RoleUser,
             };
-            userWriteRepository.Add(item);
+            userWriteRepository.Add(item, item.LoginUser);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             return mapper.Map<UserModel>(item);
         }
@@ -94,13 +94,13 @@ namespace RentalOfPremises.Services.Implementations
             var result = await userReadRepository.AnyByLoginAsync(login, cancellationToken);
             if (result == null)
             {
-                return null;
+                throw new RentalOfPremisesEntityNotFoundException<User>(Guid.NewGuid());
             }
             if (BCrypt.Net.BCrypt.Verify(password, result.PasswordUser))
             {
                 return mapper.Map<UserModel>(result);
             }
-            return null;
+            throw new RentalOfPremisesEntityNotFoundException<User>(Guid.NewGuid());
         }
     }
 }

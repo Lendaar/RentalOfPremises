@@ -1,9 +1,7 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RentalOfPremises.Api.Enums;
-using RentalOfPremises.Api.Infrastructure;
 using RentalOfPremises.Services.Contracts.Interface;
 
 namespace RentalOfPremises.Api.Controllers
@@ -14,29 +12,22 @@ namespace RentalOfPremises.Api.Controllers
     public class AuthorizationController : ControllerBase
     {
         private readonly IUserService userService;
+        private readonly ITokenService tokenService;
 
-        public AuthorizationController(IUserService userService)
+        public AuthorizationController(IUserService userService, ITokenService tokenService)
         {
             this.userService = userService;
+            this.tokenService = tokenService;
         }
 
         /// <summary>
         /// Авторизация пользователя
         /// </summary>
         [HttpPost("in")]
-        public async Task<RoleTypes> Auth(string login, string password, CancellationToken cancellationToken)
+        public async Task<string> Auth(string login, string password, CancellationToken cancellationToken)
         {
-            var result = await userService.GetByLoginAndPasswordAsync(login, password, cancellationToken);
-            if (result != null)
-            {
-                var usernameClaim = new Claim(ClaimTypes.Name, login);
-                var claims = new List<Claim> { usernameClaim };
-                var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
-                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                await HttpContext.SignInAsync(claimsPrincipal);
-                ClassAuthorazation.Name = HttpContext.User.Identity.Name;
-            }
-            return (RoleTypes)result.RoleUser;
+            var token = await tokenService.Authorization(login, password, cancellationToken);
+            return token;
         }
 
         /// <summary>
@@ -48,10 +39,12 @@ namespace RentalOfPremises.Api.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
-        [HttpGet]
-        public async Task<string> qwe(string login, string password, CancellationToken cancellationToken)
+
+        [HttpGet, Authorize(Roles = "SeniorEmployee")]
+        public async Task<IActionResult> qwe(CancellationToken cancellationToken)
         {
-            return "fdss";
+            var login = User?.Identity?.Name;
+            return Ok(login);
         }
     }
 }
