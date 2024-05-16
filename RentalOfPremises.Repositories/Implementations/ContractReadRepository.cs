@@ -3,6 +3,8 @@ using RentalOfPremises.Common.Entity.Repositories;
 using RentalOfPremises.Context.Contracts.Models;
 using RentalOfPremises.Repositories.Contracts.Interface;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.PortableExecutable;
+using System.Threading;
 
 namespace RentalOfPremises.Repositories.Implementations
 {
@@ -31,6 +33,12 @@ namespace RentalOfPremises.Repositories.Implementations
               => reader.Read<Contract>()
                 .NotDeletedAt()
                 .Where(x => x.Number == number)
+                .ToReadOnlyCollectionAsync(cancellationToken);
+        Task<IReadOnlyCollection<Contract>> IContractReadRepository.GetEndContractAsync(CancellationToken cancellationToken)
+              => reader.Read<Contract>()
+                .NotDeletedAt()
+                .Where(x => x.DateEnd <= DateTimeOffset.Now)
+                .OrderBy(x => x.DateStart)
                 .ToReadOnlyCollectionAsync(cancellationToken);
     }
 }

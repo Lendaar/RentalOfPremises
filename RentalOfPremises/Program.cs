@@ -20,6 +20,7 @@ builder.Services.AddControllers(x =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.GetSwaggerGen();
 builder.Services.AddDependences();
+builder.Services.AddQuartz();
 
 var conString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContextFactory<RentalOfPremisesContext>(options => options.UseSqlServer(conString), ServiceLifetime.Scoped);
