@@ -70,8 +70,6 @@ namespace RentalOfPremises.Services.Implementations
 
         async Task<PaymentInvoiceModel> IPaymentInvoiceService.AddAsync(PaymentInvoiceRequestModel payment, CancellationToken cancellationToken)
         {
-            var payments = await paymentInvoiceReadRepository.GetAllAsync(cancellationToken);
-
             var item = new PaymentInvoice
             {
                 Id = Guid.NewGuid(),

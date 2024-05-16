@@ -26,5 +26,11 @@ namespace RentalOfPremises.Repositories.Implementations
                 .NotDeletedAt()
                 .ById(id)
                 .FirstOrDefaultAsync(cancellationToken);
+
+        Task<IReadOnlyCollection<Contract>> IContractReadRepository.GetOneContractAsync(int number, CancellationToken cancellationToken)
+              => reader.Read<Contract>()
+                .NotDeletedAt()
+                .Where(x => x.Number == number)
+                .ToReadOnlyCollectionAsync(cancellationToken);
     }
 }

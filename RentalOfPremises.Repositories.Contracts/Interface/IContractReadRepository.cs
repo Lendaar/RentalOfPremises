@@ -16,5 +16,10 @@ namespace RentalOfPremises.Repositories.Contracts.Interface
         /// Получить <see cref="Contract"/> по идентификатору
         /// </summary>
         Task<Contract?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить <see cref="Contract"/> по относящихся к одному договору
+        /// </summary>
+        Task<IReadOnlyCollection<Contract>> GetOneContractAsync(int number, CancellationToken cancellationToken);
     }
 }
