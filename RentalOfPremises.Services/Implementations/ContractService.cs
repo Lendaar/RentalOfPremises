@@ -89,18 +89,10 @@ namespace RentalOfPremises.Services.Implementations
 
         async Task<ContractModel> IContractService.AddAsync(ContractRequestModel contract, CancellationToken cancellationToken)
         {
-            var contracts = await contractReadRepository.GetAllAsync(cancellationToken);
-            var newNumber = 1;
-            if (contracts.Count != 0)
-            {
-                var contractWithMaxNumber = contracts.MaxBy(x => x.Number);
-                newNumber = contractWithMaxNumber.Number + 1;
-            }
-
             var item = new Contract
             {
                 Id = Guid.NewGuid(),
-                Number = newNumber,
+                Number = contract.Number,
                 Payment = contract.Payment,
                 TenantId = contract.Tenant,
                 RoomId = contract.Room,

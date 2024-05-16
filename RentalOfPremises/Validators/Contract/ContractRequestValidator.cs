@@ -19,6 +19,11 @@ namespace RentalOfPremises.Api.Validators.Contract
                 .NotNull()
                 .WithMessage("Id не должно быть пустым или null");
 
+            RuleFor(x => x.Number)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("Номер договора не должно быть пустым или null");
+
             RuleFor(x => x.Payment)
                 .NotNull()
                 .NotEmpty()

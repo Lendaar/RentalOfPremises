@@ -6,6 +6,11 @@
     public class CreateContractRequest
     {
         /// <summary>
+        /// Номер договора
+        /// </summary>
+        public decimal Number { get; set; }
+
+        /// <summary>
         /// Платеж
         /// </summary>
         public decimal Payment { get; set; }
