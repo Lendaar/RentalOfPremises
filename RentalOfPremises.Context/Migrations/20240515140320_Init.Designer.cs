@@ -12,7 +12,7 @@ using RentalOfPremises.Context;
 namespace RentalOfPremises.Context.Migrations
 {
     [DbContext(typeof(RentalOfPremisesContext))]
-    [Migration("20240509143433_Init")]
+    [Migration("20240515140320_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,11 +41,11 @@ namespace RentalOfPremises.Context.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime>("DateEnd")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("DateEnd")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTime>("DateStart")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("DateStart")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
@@ -222,9 +222,6 @@ namespace RentalOfPremises.Context.Migrations
 
                     b.Property<bool>("Occupied")
                         .HasColumnType("bit");
-
-                    b.Property<double?>("Price")
-                        .HasColumnType("float");
 
                     b.Property<double>("SquareRoom")
                         .HasColumnType("float");

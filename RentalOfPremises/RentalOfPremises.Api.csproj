@@ -2,11 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.EnumMapping" Version="3.1.0" />
+    <PackageReference Include="FluentValidation" Version="11.9.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -18,6 +21,9 @@
     <ProjectReference Include="..\RentalOfPremises.Common.Entity\RentalOfPremises.Common.Entity.csproj" />
     <ProjectReference Include="..\RentalOfPremises.Common\RentalOfPremises.Common.csproj" />
     <ProjectReference Include="..\RentalOfPremises.Context\RentalOfPremises.Context.csproj" />
+    <ProjectReference Include="..\RentalOfPremises.Repositories\RentalOfPremises.Repositories.csproj" />
+    <ProjectReference Include="..\RentalOfPremises.Services\RentalOfPremises.Services.csproj" />
+    <ProjectReference Include="..\RentalOfPremises.Shared\RentalOfPremises.Shared.csproj" />
   </ItemGroup>
 
 </Project>

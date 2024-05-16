@@ -5,6 +5,7 @@ using RentalOfPremises.Context.Contracts.Models;
 using RentalOfPremises.Repositories.Contracts;
 using RentalOfPremises.Repositories.Contracts.Interface;
 using RentalOfPremises.Services.Anchors;
+using RentalOfPremises.Services.Contracts.Exceptions;
 using RentalOfPremises.Services.Contracts.Interface;
 using RentalOfPremises.Services.Contracts.Models;
 using RentalOfPremises.Services.Contracts.RequestModels;
@@ -40,7 +41,7 @@ namespace RentalOfPremises.Services.Implementations
             var item = await roomReadRepository.GetByIdAsync(id, cancellationToken);
             if (item == null)
             {
-                throw new Exception();
+                throw new RentalOfPremisesEntityNotFoundException<Room>(id);
             }
             return mapper.Map<RoomModel>(item);
         }
@@ -54,7 +55,6 @@ namespace RentalOfPremises.Services.Implementations
                 NumberRoom = room.NumberRoom,
                 SquareRoom = room.SquareRoom,
                 TypeRoom = (PremisesTypes)room.TypeRoom,
-                Price = room.Price,
                 Occupied = false,
             };
             roomWriteRepository.Add(item);
@@ -67,14 +67,13 @@ namespace RentalOfPremises.Services.Implementations
             var targetRoom = await roomReadRepository.GetByIdAsync(source.Id, cancellationToken);
             if (targetRoom == null)
             {
-                throw new Exception();
+                throw new RentalOfPremisesEntityNotFoundException<Room>(source.Id);
             }
 
             targetRoom.Liter = source.Liter;
             targetRoom.NumberRoom = source.NumberRoom;
             targetRoom.SquareRoom = source.SquareRoom;
             targetRoom.TypeRoom = (PremisesTypes)source.TypeRoom;
-            targetRoom.Price = source.Price;
             targetRoom.Occupied = source.Occupied;
 
             roomWriteRepository.Update(targetRoom);
@@ -87,11 +86,7 @@ namespace RentalOfPremises.Services.Implementations
             var targetRoom = await roomReadRepository.GetByIdAsync(id, cancellationToken);
             if (targetRoom == null)
             {
-                throw new Exception();
-            }
-            if (targetRoom.DeletedAt.HasValue)
-            {
-                throw new Exception();
+                throw new RentalOfPremisesEntityNotFoundException<Room>(id);
             }
             roomWriteRepository.Delete(targetRoom);
             await unitOfWork.SaveChangesAsync(cancellationToken);

@@ -28,11 +28,6 @@ namespace RentalOfPremises.Context.Contracts.Models
         public PremisesTypes TypeRoom { get; set; }
 
         /// <summary>
-        /// Цена аренды
-        /// </summary>
-        public double? Price { get; set; }
-
-        /// <summary>
         /// Занято ли помещение
         /// </summary>
         public bool Occupied { get; set; }

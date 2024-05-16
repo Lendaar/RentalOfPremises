@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using RentalOfPremises.Common.Entity.InterfaceDB;
+using RentalOfPremises.Context.Contracts.Models;
 using RentalOfPremises.Repositories.Contracts;
 using RentalOfPremises.Repositories.Contracts.Interface;
 using RentalOfPremises.Services.Anchors;
+using RentalOfPremises.Services.Contracts.Exceptions;
 using RentalOfPremises.Services.Contracts.Interface;
 using RentalOfPremises.Services.Contracts.Models;
-using RentalOfPremises.Context.Contracts.Models;
 using RentalOfPremises.Services.Contracts.RequestModels;
 
 namespace RentalOfPremises.Services.Implementations
@@ -39,7 +40,7 @@ namespace RentalOfPremises.Services.Implementations
             var item = await priceReadRepository.GetByIdAsync(id, cancellationToken);
             if (item == null)
             {
-                throw new Exception();
+                throw new RentalOfPremisesEntityNotFoundException<Price>(id);
             }
             return mapper.Map<PriceModel>(item);
         }
@@ -66,7 +67,7 @@ namespace RentalOfPremises.Services.Implementations
             var targetCourse = await priceReadRepository.GetByIdAsync(source.Id, cancellationToken);
             if (targetCourse == null)
             {
-                throw new Exception();
+                throw new RentalOfPremisesEntityNotFoundException<Price>(source.Id);
             }
 
             targetCourse.Electricity = source.Electricity;
@@ -86,11 +87,7 @@ namespace RentalOfPremises.Services.Implementations
             var targetCourse = await priceReadRepository.GetByIdAsync(id, cancellationToken);
             if (targetCourse == null)
             {
-                throw new Exception();
-            }
-            if (targetCourse.DeletedAt.HasValue)
-            {
-                throw new Exception();
+                throw new RentalOfPremisesEntityNotFoundException<Price>(id);
             }
             priceWriteRepository.Delete(targetCourse);
             await unitOfWork.SaveChangesAsync(cancellationToken);

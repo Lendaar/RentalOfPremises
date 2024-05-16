@@ -38,12 +38,12 @@
         /// <summary>
         /// Дата начала действия договора
         /// </summary>
-        public DateTime DateStart { get; set; }
+        public DateTimeOffset DateStart { get; set; }
 
         /// <summary>
         /// Дата окончания действия договора
         /// </summary>
-        public DateTime DateEnd { get; set; }
+        public DateTimeOffset DateEnd { get; set; }
 
         /// <summary>
         /// Архивный ли договор

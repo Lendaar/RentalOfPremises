@@ -5,6 +5,7 @@ using RentalOfPremises.Context.Contracts.Models;
 using RentalOfPremises.Repositories.Contracts;
 using RentalOfPremises.Repositories.Contracts.Interface;
 using RentalOfPremises.Services.Anchors;
+using RentalOfPremises.Services.Contracts.Exceptions;
 using RentalOfPremises.Services.Contracts.Interface;
 using RentalOfPremises.Services.Contracts.Models;
 using RentalOfPremises.Services.Contracts.RequestModels;
@@ -40,7 +41,7 @@ namespace RentalOfPremises.Services.Implementations
             var item = await userReadRepository.GetByIdAsync(id, cancellationToken);
             if (item == null)
             {
-                throw new Exception();
+                throw new RentalOfPremisesEntityNotFoundException<User>(id);
             }
             return mapper.Map<UserModel>(item);
         }
@@ -64,7 +65,7 @@ namespace RentalOfPremises.Services.Implementations
             var targetUser = await userReadRepository.GetByIdAsync(source.Id, cancellationToken);
             if (targetUser == null)
             {
-                throw new Exception();
+                throw new RentalOfPremisesEntityNotFoundException<User>(source.Id);
             }
 
             targetUser.LoginUser = source.LoginUser;
@@ -81,11 +82,7 @@ namespace RentalOfPremises.Services.Implementations
             var targetUser = await userReadRepository.GetByIdAsync(id, cancellationToken);
             if (targetUser == null)
             {
-                throw new Exception();
-            }
-            if (targetUser.DeletedAt.HasValue)
-            {
-                throw new Exception();
+                throw new RentalOfPremisesEntityNotFoundException<User>(id);
             }
             userWriteRepository.Delete(targetUser);
             await unitOfWork.SaveChangesAsync(cancellationToken);
