@@ -8,18 +8,18 @@ using RentalOfPremises.Services.Contracts.Interface;
 
 namespace RentalOfPremises.Services.Implementations
 {
-    public class AuthorizationService : ITokenService, IServiceAnchor
+    public class TokenService : ITokenService, IServiceAnchor
     {
         private readonly IUserReadRepository userReadRepository;
 
-        public AuthorizationService(IUserReadRepository userReadRepository)
+        public TokenService(IUserReadRepository userReadRepository)
         {
             this.userReadRepository = userReadRepository;
         }
 
         async Task<string> ITokenService.Authorization(string login, string password, CancellationToken cancellationToken)
         {
-            var user = await userReadRepository.AnyByLoginAsync(login, cancellationToken);
+            var user = await userReadRepository.GetByLoginAsync(login, cancellationToken);
             if (user == null)
             {
                 throw new RentalOfPremisesInvalidOperationException("USER_NOT_FOUND");

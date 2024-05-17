@@ -41,7 +41,7 @@ namespace RentalOfPremises.Repositories.Implementations
                  .ById(id)
                  .AnyAsync(cancellationToken);
 
-        Task<User?> IUserReadRepository.AnyByLoginAsync(string login, CancellationToken cancellationToken)
+        Task<User?> IUserReadRepository.GetByLoginAsync(string login, CancellationToken cancellationToken)
              => reader.Read<User>()
                  .NotDeletedAt()
                  .Where(x => x.LoginUser == login)

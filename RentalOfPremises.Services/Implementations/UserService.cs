@@ -9,7 +9,6 @@ using RentalOfPremises.Services.Contracts.Exceptions;
 using RentalOfPremises.Services.Contracts.Interface;
 using RentalOfPremises.Services.Contracts.Models;
 using RentalOfPremises.Services.Contracts.RequestModels;
-using RoleTypes_Services = RentalOfPremises.Services.Contracts.Enums.RoleTypes;
 
 namespace RentalOfPremises.Services.Implementations
 {
@@ -91,16 +90,16 @@ namespace RentalOfPremises.Services.Implementations
 
         async Task<UserModel?> IUserService.GetByLoginAndPasswordAsync(string login, string password, CancellationToken cancellationToken)
         {
-            var result = await userReadRepository.AnyByLoginAsync(login, cancellationToken);
+            var result = await userReadRepository.GetByLoginAsync(login, cancellationToken);
             if (result == null)
             {
-                throw new RentalOfPremisesEntityNotFoundException<User>(Guid.NewGuid());
+                throw new RentalOfPremisesInvalidOperationException("USER_NOT_FOUND");
             }
             if (BCrypt.Net.BCrypt.Verify(password, result.PasswordUser))
             {
                 return mapper.Map<UserModel>(result);
             }
-            throw new RentalOfPremisesEntityNotFoundException<User>(Guid.NewGuid());
+            throw new RentalOfPremisesInvalidOperationException("USER_NOT_FOUND");
         }
     }
 }
