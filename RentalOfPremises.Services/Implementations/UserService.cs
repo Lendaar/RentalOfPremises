@@ -87,19 +87,5 @@ namespace RentalOfPremises.Services.Implementations
             userWriteRepository.Delete(targetUser);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
-
-        async Task<UserModel?> IUserService.GetByLoginAndPasswordAsync(string login, string password, CancellationToken cancellationToken)
-        {
-            var result = await userReadRepository.GetByLoginAsync(login, cancellationToken);
-            if (result == null)
-            {
-                throw new RentalOfPremisesInvalidOperationException("USER_NOT_FOUND");
-            }
-            if (BCrypt.Net.BCrypt.Verify(password, result.PasswordUser))
-            {
-                return mapper.Map<UserModel>(result);
-            }
-            throw new RentalOfPremisesInvalidOperationException("USER_NOT_FOUND");
-        }
     }
 }

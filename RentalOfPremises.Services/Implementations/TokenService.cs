@@ -24,13 +24,17 @@ namespace RentalOfPremises.Services.Implementations
             {
                 throw new RentalOfPremisesInvalidOperationException("USER_NOT_FOUND");
             }
-            var claims = new List<Claim>
+            if (BCrypt.Net.BCrypt.Verify(password, user.PasswordUser))
             {
-                new Claim(ClaimTypes.Name, user.LoginUser),
-                new Claim(ClaimTypes.Role, user.RoleUser.ToString())
-            };
-            var accessToken = GenerateAccessToken(claims);
-            return accessToken;
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.LoginUser),
+                    new Claim(ClaimTypes.Role, user.RoleUser.ToString())
+                };
+                var accessToken = GenerateAccessToken(claims);
+                return accessToken;
+            }
+            throw new RentalOfPremisesInvalidOperationException("USER_NOT_FOUND");
         }
 
         public string GenerateAccessToken(IEnumerable<Claim> claims)

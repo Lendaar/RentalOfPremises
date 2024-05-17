@@ -30,10 +30,5 @@ namespace RentalOfPremises.Services.Contracts.Interface
         /// Удаляет существующую <see cref="UserModel"/>
         /// </summary>
         Task DeleteAsync(Guid id, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Получить <see cref="UserModel"/> по логину и паролю
-        /// </summary>
-        Task<UserModel?> GetByLoginAndPasswordAsync(string login, string password, CancellationToken cancellationToken);
     }
 }
