@@ -30,6 +30,8 @@ if (app.Environment.IsDevelopment())
     app.GetSwaggerUI();
 }
 
+app.UseStaticFiles();
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

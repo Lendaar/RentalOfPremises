@@ -1,4 +1,6 @@
-﻿using RentalOfPremises.Api.Infrastructure;
+﻿using DinkToPdf.Contracts;
+using DinkToPdf;
+using RentalOfPremises.Api.Infrastructure;
 using RentalOfPremises.Api.Infrastructures.Validator;
 using RentalOfPremises.Common;
 using RentalOfPremises.Common.Entity.InterfaceDB;
@@ -24,6 +26,8 @@ namespace RentalOfPremises.Infrastructure
             services.RegisterModule<RepositoriesModule>();
 
             services.RegisterAutoMapper();
+
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
         }
     }
 }

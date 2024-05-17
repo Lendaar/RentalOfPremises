@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AutoMapper;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using RentalOfPremises.Api.Attribute;
 using RentalOfPremises.Api.Infrastructures.Validator;
@@ -21,12 +23,16 @@ namespace RentalOfPremises.Api.Controllers
         private readonly IContractService contractService;
         private readonly IApiValidatorService validatorService;
         private readonly IMapper mapper;
+        private readonly IWebHostEnvironment webHost;
+        private IConverter converter;
 
-        public ContractController(IContractService contractService, IMapper mapper, IApiValidatorService validatorService)
+        public ContractController(IContractService contractService, IMapper mapper, IApiValidatorService validatorService, IWebHostEnvironment webHost, IConverter converter)
         {
             this.contractService = contractService;
             this.validatorService = validatorService;
             this.mapper = mapper;
+            this.webHost = webHost;
+            this.converter = converter;
         }
 
         /// <summary>
@@ -38,6 +44,40 @@ namespace RentalOfPremises.Api.Controllers
         {
             var result = await contractService.GetAllAsync(cancellationToken);
             return Ok(mapper.Map<IEnumerable<ContractResponse>>(result));
+        }
+
+        /// <summary>
+        /// СФормировать договор аренды
+        /// </summary>
+        [HttpGet("Document")]
+        [ApiOk(typeof(IEnumerable<ContractResponse>))]
+        public async Task<IActionResult> GetDoc([Required] int id, CancellationToken cancellationToken)
+        {
+            var path = webHost.WebRootPath + "/Contract_Shablon.html";
+            var result = await contractService.GetContractAsync(path, id, cancellationToken);
+
+            var globalSettings = new GlobalSettings
+            {
+                ColorMode = ColorMode.Color,
+                Orientation = Orientation.Portrait,
+                PaperSize = PaperKind.A4,
+                Margins = new MarginSettings { Top = 10 },
+                DocumentTitle = "PDF_Contract",
+                Out = $"Договор аренды #{id}.pdf"
+            };
+            var objectSettings = new ObjectSettings
+            {
+                PagesCount = true,
+                HtmlContent = result,
+                WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = null }
+            };
+            var pdf = new HtmlToPdfDocument()
+            {
+                GlobalSettings = globalSettings,
+                Objects = { objectSettings }
+            };
+            converter.Convert(pdf);
+            return Ok("yes");
         }
 
         /// <summary>

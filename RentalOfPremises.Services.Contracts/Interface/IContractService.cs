@@ -29,5 +29,10 @@ namespace RentalOfPremises.Services.Contracts.Interface
         /// Удаляет существующую <see cref="ContractModel"/>
         /// </summary>
         Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Формирует документ
+        /// </summary>
+        Task<string> GetContractAsync(string path, int id, CancellationToken cancellationToken);
     }
 }
