@@ -84,6 +84,14 @@ namespace RentalOfPremises.Services.Implementations
             {
                 throw new RentalOfPremisesEntityNotFoundException<User>(id);
             }
+            if (targetUser.RoleUser == RoleTypes.Administrator)
+            {
+                var administators = await userReadRepository.GetAllAdministratorsAsync(cancellationToken);
+                if (administators.Count == 1)
+                {
+                    throw new RentalOfPremisesInvalidOperationException("Невозможно удалить последнего администратора!");
+                }
+            }
             userWriteRepository.Delete(targetUser);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
