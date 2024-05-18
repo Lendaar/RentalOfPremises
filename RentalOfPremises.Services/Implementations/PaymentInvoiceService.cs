@@ -68,7 +68,7 @@ namespace RentalOfPremises.Services.Implementations
             return payment;
         }
 
-        async Task<PaymentInvoiceModel> IPaymentInvoiceService.AddAsync(PaymentInvoiceRequestModel payment, CancellationToken cancellationToken)
+        async Task<PaymentInvoiceModel> IPaymentInvoiceService.AddAsync(PaymentInvoiceRequestModel payment, string login, CancellationToken cancellationToken)
         {
             var item = new PaymentInvoice
             {
@@ -83,12 +83,12 @@ namespace RentalOfPremises.Services.Implementations
                 PriceId = payment.Price
             };
 
-            paymentInvoiceWriteRepository.Add(item);
+            paymentInvoiceWriteRepository.Add(item, login);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             return mapper.Map<PaymentInvoiceModel>(item);
         }
 
-        async Task<PaymentInvoiceModel> IPaymentInvoiceService.EditAsync(PaymentInvoiceRequestModel source, CancellationToken cancellationToken)
+        async Task<PaymentInvoiceModel> IPaymentInvoiceService.EditAsync(PaymentInvoiceRequestModel source, string login, CancellationToken cancellationToken)
         {
             var targetPaymentItem = await paymentInvoiceReadRepository.GetByIdAsync(source.Id, cancellationToken);
 
@@ -108,19 +108,19 @@ namespace RentalOfPremises.Services.Implementations
             targetPaymentItem.PriceId = price!.Id;
             targetPaymentItem.Price = price;
 
-            paymentInvoiceWriteRepository.Update(targetPaymentItem);
+            paymentInvoiceWriteRepository.Update(targetPaymentItem, login);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             return mapper.Map<PaymentInvoiceModel>(targetPaymentItem);
         }
 
-        async Task IPaymentInvoiceService.DeleteAsync(Guid id, CancellationToken cancellationToken)
+        async Task IPaymentInvoiceService.DeleteAsync(Guid id, string login, CancellationToken cancellationToken)
         {
             var targetPaymentItem = await paymentInvoiceReadRepository.GetByIdAsync(id, cancellationToken);
             if (targetPaymentItem == null)
             {
                 throw new RentalOfPremisesEntityNotFoundException<PaymentInvoice>(id);
             }
-            paymentInvoiceWriteRepository.Delete(targetPaymentItem);
+            paymentInvoiceWriteRepository.Delete(targetPaymentItem, login);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }

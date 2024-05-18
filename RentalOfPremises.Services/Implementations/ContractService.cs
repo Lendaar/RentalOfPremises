@@ -88,7 +88,7 @@ namespace RentalOfPremises.Services.Implementations
             return contract;
         }
 
-        async Task<ContractModel> IContractService.AddAsync(ContractRequestModel contract, CancellationToken cancellationToken)
+        async Task<ContractModel> IContractService.AddAsync(ContractRequestModel contract, string login, CancellationToken cancellationToken)
         {
             var item = new Contract
             {
@@ -106,12 +106,12 @@ namespace RentalOfPremises.Services.Implementations
             room.Occupied = true;
             roomWriteRepository.Update(room);
 
-            contractWriteRepository.Add(item);
+            contractWriteRepository.Add(item, login);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             return mapper.Map<ContractModel>(item);
         }
 
-        async Task<ContractModel> IContractService.EditAsync(ContractRequestModel source, CancellationToken cancellationToken)
+        async Task<ContractModel> IContractService.EditAsync(ContractRequestModel source, string login, CancellationToken cancellationToken)
         {
             var targetContractItem = await contractReadRepository.GetByIdAsync(source.Id, cancellationToken);
 
@@ -133,19 +133,19 @@ namespace RentalOfPremises.Services.Implementations
             targetContractItem.RoomId = room!.Id;
             targetContractItem.Room = room;
 
-            contractWriteRepository.Update(targetContractItem);
+            contractWriteRepository.Update(targetContractItem, login);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             return mapper.Map<ContractModel>(targetContractItem);
         }
 
-        async Task IContractService.DeleteAsync(Guid id, CancellationToken cancellationToken)
+        async Task IContractService.DeleteAsync(Guid id, string login, CancellationToken cancellationToken)
         {
             var targetContractItem = await contractReadRepository.GetByIdAsync(id, cancellationToken);
             if (targetContractItem == null)
             {
                 throw new RentalOfPremisesEntityNotFoundException<Contract>(id);
             }
-            contractWriteRepository.Delete(targetContractItem);
+            contractWriteRepository.Delete(targetContractItem, login);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
 

@@ -63,7 +63,7 @@ namespace RentalOfPremises.Api.Controllers
         {
             await validatorService.ValidateAsync(request, cancellationToken);
             var userRequestModel = mapper.Map<UserRequestModel>(request);
-            var result = await userService.AddAsync(userRequestModel, cancellationToken);
+            var result = await userService.AddAsync(userRequestModel, User?.Identity?.Name, cancellationToken);
             return Ok(mapper.Map<UserResponse>(result));
         }
 
@@ -78,7 +78,7 @@ namespace RentalOfPremises.Api.Controllers
         {
             await validatorService.ValidateAsync(request, cancellationToken);
             var model = mapper.Map<UserRequestModel>(request);
-            var result = await userService.EditAsync(model, cancellationToken);
+            var result = await userService.EditAsync(model, User?.Identity?.Name, cancellationToken);
             return Ok(mapper.Map<UserResponse>(result));
         }
 
@@ -91,7 +91,7 @@ namespace RentalOfPremises.Api.Controllers
         [ApiNotAcceptable]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
-            await userService.DeleteAsync(id, cancellationToken);
+            await userService.DeleteAsync(id, User?.Identity?.Name, cancellationToken);
             return Ok();
         }
     }

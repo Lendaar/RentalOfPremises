@@ -63,7 +63,7 @@ namespace RentalOfPremises.Api.Controllers
         {
             await validatorService.ValidateAsync(request, cancellationToken);
             var roomRequestModel = mapper.Map<RoomRequestModel>(request);
-            var result = await roomService.AddAsync(roomRequestModel, cancellationToken);
+            var result = await roomService.AddAsync(roomRequestModel, User?.Identity?.Name, cancellationToken);
             return Ok(mapper.Map<RoomResponse>(result));
         }
 
@@ -78,7 +78,7 @@ namespace RentalOfPremises.Api.Controllers
         {
             await validatorService.ValidateAsync(request, cancellationToken);
             var model = mapper.Map<RoomRequestModel>(request);
-            var result = await roomService.EditAsync(model, cancellationToken);
+            var result = await roomService.EditAsync(model, User?.Identity?.Name, cancellationToken);
             return Ok(mapper.Map<RoomResponse>(result));
         }
 
@@ -91,7 +91,7 @@ namespace RentalOfPremises.Api.Controllers
         [ApiNotAcceptable]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
-            await roomService.DeleteAsync(id, cancellationToken);
+            await roomService.DeleteAsync(id, User?.Identity?.Name, cancellationToken);
             return Ok();
         }
     }

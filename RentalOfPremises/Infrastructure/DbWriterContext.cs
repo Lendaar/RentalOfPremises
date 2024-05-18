@@ -1,8 +1,4 @@
-﻿using System.Security.Claims;
-using System.Security.Principal;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using RentalOfPremises.Common;
+﻿using RentalOfPremises.Common;
 using RentalOfPremises.Common.Entity.InterfaceDB;
 
 namespace RentalOfPremises.Api.Infrastructure

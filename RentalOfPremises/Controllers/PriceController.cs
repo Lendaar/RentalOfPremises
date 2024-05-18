@@ -62,7 +62,7 @@ namespace RentalOfPremises.Api.Controllers
         {
             await validatorService.ValidateAsync(request, cancellationToken);
             var priceRequestModel = mapper.Map<PriceRequestModel>(request);
-            var result = await priceService.AddAsync(priceRequestModel, cancellationToken);
+            var result = await priceService.AddAsync(priceRequestModel, User?.Identity?.Name, cancellationToken);
             return Ok(mapper.Map<PriceResponse>(result));
         }
 
@@ -77,7 +77,7 @@ namespace RentalOfPremises.Api.Controllers
         {
             await validatorService.ValidateAsync(request, cancellationToken);
             var model = mapper.Map<PriceRequestModel>(request);
-            var result = await priceService.EditAsync(model, cancellationToken);
+            var result = await priceService.EditAsync(model, User?.Identity?.Name, cancellationToken);
             return Ok(mapper.Map<PriceResponse>(result));
         }
 
@@ -90,7 +90,7 @@ namespace RentalOfPremises.Api.Controllers
         [ApiNotAcceptable]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
-            await priceService.DeleteAsync(id, cancellationToken);
+            await priceService.DeleteAsync(id, User?.Identity?.Name, cancellationToken);
             return Ok();
         }
     }

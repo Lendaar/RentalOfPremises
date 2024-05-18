@@ -19,16 +19,16 @@ namespace RentalOfPremises.Services.Contracts.Interface
         /// <summary>
         /// Добавляет новую <see cref="UserModel"/>
         /// </summary>
-        Task<UserModel> AddAsync(UserRequestModel course, CancellationToken cancellationToken);
+        Task<UserModel> AddAsync(UserRequestModel course, string login, CancellationToken cancellationToken);
 
         /// <summary>
         /// Редактирует существующую <see cref="UserModel"/>
         /// </summary>
-        Task<UserModel> EditAsync(UserRequestModel source, CancellationToken cancellationToken);
+        Task<UserModel> EditAsync(UserRequestModel source, string login, CancellationToken cancellationToken);
 
         /// <summary>
         /// Удаляет существующую <see cref="UserModel"/>
         /// </summary>
-        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+        Task DeleteAsync(Guid id, string login, CancellationToken cancellationToken);
     }
 }

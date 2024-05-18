@@ -46,7 +46,7 @@ namespace RentalOfPremises.Services.Implementations
             return mapper.Map<TenantModel>(item);
         }
 
-        async Task<TenantModel> ITenantService.AddAsync(TenantRequestModel tenant, CancellationToken cancellationToken)
+        async Task<TenantModel> ITenantService.AddAsync(TenantRequestModel tenant, string login, CancellationToken cancellationToken)
         {
             var item = new Tenant
             {
@@ -68,12 +68,12 @@ namespace RentalOfPremises.Services.Implementations
                 Telephone = tenant.Telephone,
                 Email = tenant.Email
             };
-            tenantWriteRepository.Add(item);
+            tenantWriteRepository.Add(item, login);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             return mapper.Map<TenantModel>(item);
         }
 
-        async Task<TenantModel> ITenantService.EditAsync(TenantRequestModel source, CancellationToken cancellationToken)
+        async Task<TenantModel> ITenantService.EditAsync(TenantRequestModel source, string login, CancellationToken cancellationToken)
         {
             var targetTenant = await tenantReadRepository.GetByIdAsync(source.Id, cancellationToken);
             if (targetTenant == null)
@@ -98,19 +98,19 @@ namespace RentalOfPremises.Services.Implementations
             targetTenant.Telephone = source.Telephone;
             targetTenant.Email = source.Email;
 
-            tenantWriteRepository.Update(targetTenant);
+            tenantWriteRepository.Update(targetTenant, login);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             return mapper.Map<TenantModel>(targetTenant);
         }
 
-        async Task ITenantService.DeleteAsync(Guid id, CancellationToken cancellationToken)
+        async Task ITenantService.DeleteAsync(Guid id, string login, CancellationToken cancellationToken)
         {
             var targetTenant = await tenantReadRepository.GetByIdAsync(id, cancellationToken);
             if (targetTenant == null)
             {
                 throw new RentalOfPremisesEntityNotFoundException<Tenant>(id);
             }
-            tenantWriteRepository.Delete(targetTenant);
+            tenantWriteRepository.Delete(targetTenant, login);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }

@@ -45,7 +45,7 @@ namespace RentalOfPremises.Services.Implementations
             return mapper.Map<PriceModel>(item);
         }
 
-        async Task<PriceModel> IPriceService.AddAsync(PriceRequestModel price, CancellationToken cancellationToken)
+        async Task<PriceModel> IPriceService.AddAsync(PriceRequestModel price, string login, CancellationToken cancellationToken)
         {
             var item = new Price
             {
@@ -57,12 +57,12 @@ namespace RentalOfPremises.Services.Implementations
                 PassLegСar = price.PassLegСar,
                 PassGrСar = price.PassGrСar,
             };
-            priceWriteRepository.Add(item);
+            priceWriteRepository.Add(item, login);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             return mapper.Map<PriceModel>(item);
         }
 
-        async Task<PriceModel> IPriceService.EditAsync(PriceRequestModel source, CancellationToken cancellationToken)
+        async Task<PriceModel> IPriceService.EditAsync(PriceRequestModel source, string login, CancellationToken cancellationToken)
         {
             var targetCourse = await priceReadRepository.GetByIdAsync(source.Id, cancellationToken);
             if (targetCourse == null)
@@ -77,19 +77,19 @@ namespace RentalOfPremises.Services.Implementations
             targetCourse.PassLegСar = source.PassLegСar;
             targetCourse.PassGrСar = source.PassGrСar;
 
-            priceWriteRepository.Update(targetCourse);
+            priceWriteRepository.Update(targetCourse, login);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             return mapper.Map<PriceModel>(targetCourse);
         }
 
-        async Task IPriceService.DeleteAsync(Guid id, CancellationToken cancellationToken)
+        async Task IPriceService.DeleteAsync(Guid id, string login, CancellationToken cancellationToken)
         {
             var targetCourse = await priceReadRepository.GetByIdAsync(id, cancellationToken);
             if (targetCourse == null)
             {
                 throw new RentalOfPremisesEntityNotFoundException<Price>(id);
             }
-            priceWriteRepository.Delete(targetCourse);
+            priceWriteRepository.Delete(targetCourse, login);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
