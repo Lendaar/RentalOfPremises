@@ -1,5 +1,6 @@
-﻿using RentalOfPremises.Api.ModelsRequest.User;
-using FluentValidation;
+﻿using FluentValidation;
+using RentalOfPremises.Api.ModelsRequest.User;
+using RentalOfPremises.Repositories.Contracts.Interface;
 
 namespace RentalOfPremises.Api.Validators.User
 {
@@ -11,7 +12,7 @@ namespace RentalOfPremises.Api.Validators.User
         /// <summary>
         /// Инициализирую <see cref="UserRequestValidator"/>
         /// </summary>
-        public UserRequestValidator()
+        public UserRequestValidator(IUserReadRepository userReadRepository)
         {
             RuleFor(x => x.Id)
                 .NotEmpty()
@@ -22,6 +23,12 @@ namespace RentalOfPremises.Api.Validators.User
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("Логин не должно быть пустым или null")
+                .Must((x, _) =>
+                {
+                    var userExists = userReadRepository.AnyByLoginForChange(x.Id, x.LoginUser);
+                    return !userExists;
+                })
+                .WithMessage("Такой логин уже используется")
                 .MaximumLength(50)
                 .WithMessage("Логин больше 50 символов");
 

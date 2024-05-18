@@ -52,5 +52,15 @@ namespace RentalOfPremises.Repositories.Implementations
                  .NotDeletedAt()
                  .Where(x => x.RoleUser == RoleTypes.Administrator)
                  .ToReadOnlyCollectionAsync(cancellationToken);
+
+        Task<bool> IUserReadRepository.AnyByLoginAsync(string login, CancellationToken cancellationToken)
+             => reader.Read<User>()
+                 .NotDeletedAt()
+                 .AnyAsync(x => x.LoginUser == login, cancellationToken);
+
+        bool IUserReadRepository.AnyByLoginForChange(Guid id, string login)
+             => reader.Read<User>()
+                 .NotDeletedAt()
+                 .Any(x => x.LoginUser == login && x.Id != id);
     }
 }

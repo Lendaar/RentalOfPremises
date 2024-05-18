@@ -1,5 +1,6 @@
-﻿using RentalOfPremises.Api.ModelsRequest.Tenant;
-using FluentValidation;
+﻿using FluentValidation;
+using RentalOfPremises.Api.ModelsRequest.Tenant;
+using RentalOfPremises.Repositories.Contracts.Interface;
 
 namespace RentalOfPremises.Api.Validators.Tenant
 {
@@ -11,7 +12,7 @@ namespace RentalOfPremises.Api.Validators.Tenant
         /// <summary>
         /// Инициализирую <see cref="CreateTenantRequestValidator"/>
         /// </summary>
-        public CreateTenantRequestValidator()
+        public CreateTenantRequestValidator(ITenantReadRepository tenantReadRepository)
         {
             RuleFor(x => x.Title)
                 .NotNull()
@@ -42,6 +43,12 @@ namespace RentalOfPremises.Api.Validators.Tenant
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("ИНН не должно быть пустым или null")
+                .MustAsync(async (inn, CancellationToken) =>
+                {
+                    var tenantExists = await tenantReadRepository.AnyByInnAsync(inn, CancellationToken);
+                    return !tenantExists;
+                })
+                .WithMessage("ИНН не уникален")
                 .MaximumLength(12)
                 .WithMessage("ИНН больше 12 символов");
 
@@ -88,6 +95,12 @@ namespace RentalOfPremises.Api.Validators.Tenant
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("ОКПО не должен быть пустым или null")
+                .MustAsync(async (okpo, CancellationToken) =>
+                {
+                    var tenantExists = await tenantReadRepository.AnyByOkpoAsync(okpo, CancellationToken);
+                    return !tenantExists;
+                })
+                .WithMessage("ОКПО не уникален")
                 .MaximumLength(10)
                 .WithMessage("ОКПО больше 10 символов");
 
@@ -95,6 +108,12 @@ namespace RentalOfPremises.Api.Validators.Tenant
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("ОГРН не должно быть пустым или null")
+                .MustAsync(async (ogrn, CancellationToken) =>
+                {
+                    var tenantExists = await tenantReadRepository.AnyByOgrnAsync(ogrn, CancellationToken);
+                    return !tenantExists;
+                })
+                .WithMessage("ОГРН не уникален")
                 .MaximumLength(15)
                 .WithMessage("ОГРН больше 15 символов");
 
@@ -102,6 +121,12 @@ namespace RentalOfPremises.Api.Validators.Tenant
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("Телефон не должно быть пустым или null")
+                .MustAsync(async (telephone, CancellationToken) =>
+                {
+                    var tenantExists = await tenantReadRepository.AnyByTelephoneAsync(telephone, CancellationToken);
+                    return !tenantExists;
+                })
+                .WithMessage("Телефон не уникален")
                 .MaximumLength(30)
                 .WithMessage("Телефон больше 30 символов");
 

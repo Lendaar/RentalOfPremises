@@ -1,6 +1,6 @@
-﻿using System.Text.RegularExpressions;
-using FluentValidation;
+﻿using FluentValidation;
 using RentalOfPremises.Api.ModelsRequest.User;
+using RentalOfPremises.Repositories.Contracts.Interface;
 
 namespace RentalOfPremises.Api.Validators.User
 {
@@ -12,12 +12,18 @@ namespace RentalOfPremises.Api.Validators.User
         /// <summary>
         /// Инициализирую <see cref="CreateUserRequestValidator"/>
         /// </summary>
-        public CreateUserRequestValidator()
+        public CreateUserRequestValidator(IUserReadRepository userReadRepository)
         {
             RuleFor(x => x.LoginUser)
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("Логин не должно быть пустым или null")
+                .MustAsync(async (login, CancellationToken) =>
+                {
+                    var userExists = await userReadRepository.AnyByLoginAsync(login, CancellationToken);
+                    return !userExists;
+                })
+                .WithMessage("Такой логин уже используется")
                 .MaximumLength(50)
                 .WithMessage("Логин больше 50 символов");
 
