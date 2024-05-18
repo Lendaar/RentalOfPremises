@@ -6,6 +6,7 @@ using RentalOfPremises.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.GetAuthentication();
+builder.Services.AddHttpContextAccessor();
 // Add services to the container.
 builder.Services.AddControllers(x =>
 {

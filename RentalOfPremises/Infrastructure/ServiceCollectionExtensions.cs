@@ -15,6 +15,8 @@ namespace RentalOfPremises.Infrastructure
     {
         public static void AddDependences(this IServiceCollection services)
         {
+            services.AddScoped<IIdentityProvider, ApiIdentityProvider>();
+
             services.AddTransient<IDateTimeProvider, DateTimeProvider>();
             services.AddTransient<IDbWriterContext, DbWriterContext>();
             services.AddTransient<IApiValidatorService, ApiValidatorService>();

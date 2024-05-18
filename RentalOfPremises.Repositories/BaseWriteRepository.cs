@@ -23,29 +23,29 @@ namespace RentalOfPremises.Repositories
         }
 
         /// <inheritdoc cref="IRepositoryWriter{T}"/>
-        public virtual void Add([NotNull] T entity, string createdBy = "")
+        public virtual void Add([NotNull] T entity)
         {
             if (entity is IEntityWithId entityWithId &&
                 entityWithId.Id == Guid.Empty)
             {
                 entityWithId.Id = Guid.NewGuid();
             }
-            AuditForCreate(entity, createdBy);
-            AuditForUpdate(entity, createdBy);
+            AuditForCreate(entity);
+            AuditForUpdate(entity);
             writerContext.Writer.Add(entity);
         }
 
         /// <inheritdoc cref="IRepositoryWriter{T}"/>
-        public void Update([NotNull] T entity, string updatedBy = "")
+        public void Update([NotNull] T entity)
         {
-            AuditForUpdate(entity, updatedBy);
+            AuditForUpdate(entity);
             writerContext.Writer.Update(entity);
         }
 
         /// <inheritdoc cref="IRepositoryWriter{T}"/>
-        public void Delete([NotNull] T entity, string updatedBy = "")
+        public void Delete([NotNull] T entity)
         {
-            AuditForUpdate(entity, updatedBy);
+            AuditForUpdate(entity);
             AuditForDelete(entity);
             if (entity is IEntityAuditDeleted)
             {
@@ -57,21 +57,21 @@ namespace RentalOfPremises.Repositories
             }
         }
 
-        private void AuditForCreate([NotNull] T entity, string createdBy)
+        private void AuditForCreate([NotNull] T entity)
         {
             if (entity is IEntityAuditCreated auditCreated)
             {
                 auditCreated.CreatedAt = writerContext.DateTimeProvider.UtcNow;
-                auditCreated.CreatedBy = createdBy == null ? writerContext.UserName : createdBy;
+                auditCreated.CreatedBy = writerContext.IdentityProvider.Name;
             }
         }
 
-        private void AuditForUpdate([NotNull] T entity, string updateBy)
+        private void AuditForUpdate([NotNull] T entity)
         {
             if (entity is IEntityAuditUpdated auditUpdate)
             {
                 auditUpdate.UpdatedAt = writerContext.DateTimeProvider.UtcNow;
-                auditUpdate.UpdatedBy = updateBy == null ? writerContext.UserName : updateBy;
+                auditUpdate.UpdatedBy = writerContext.IdentityProvider.Name;
             }
         }
 

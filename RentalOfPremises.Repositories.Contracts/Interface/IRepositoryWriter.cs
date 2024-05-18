@@ -10,16 +10,16 @@ namespace RentalOfPremises.Repositories.Contracts
         /// <summary>
         /// Добавить новую запись
         /// </summary>
-        void Add([NotNull] TEntity entity, string createdBy = "");
+        void Add([NotNull] TEntity entity);
 
         /// <summary>
         /// Изменить запись
         /// </summary>
-        void Update([NotNull] TEntity entity, string updateBy = "");
+        void Update([NotNull] TEntity entity);
 
         /// <summary>
         /// Удалить запись
         /// </summary>
-        void Delete([NotNull] TEntity entity, string updateBy = "");
+        void Delete([NotNull] TEntity entity);
     }
 }

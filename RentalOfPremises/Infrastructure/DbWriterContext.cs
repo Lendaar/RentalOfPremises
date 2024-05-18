@@ -13,11 +13,13 @@ namespace RentalOfPremises.Api.Infrastructure
         public DbWriterContext(
             IDbWriter writer,
             IUnitOfWork unitOfWork,
-            IDateTimeProvider dateTimeProvider)
+            IDateTimeProvider dateTimeProvider,
+            IIdentityProvider identity)
         {
             Writer = writer;
             UnitOfWork = unitOfWork;
             DateTimeProvider = dateTimeProvider;
+            IdentityProvider = identity;
         }
 
         /// <inheritdoc/>
@@ -30,6 +32,6 @@ namespace RentalOfPremises.Api.Infrastructure
         public IDateTimeProvider DateTimeProvider { get; }
 
         /// <inheritdoc/>
-        public string UserName { get; } = "RentalOfPremises.Api";
+        public IIdentityProvider IdentityProvider { get; }
     }
 }

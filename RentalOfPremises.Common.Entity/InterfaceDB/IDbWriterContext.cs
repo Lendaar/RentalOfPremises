@@ -20,6 +20,6 @@
         /// Имя пользователя
         /// </summary>
         /// <remarks>В реальной системе с авторизацией тут будет IIdentity</remarks>
-        string UserName { get; }
+        IIdentityProvider IdentityProvider { get; }
     }
 }
