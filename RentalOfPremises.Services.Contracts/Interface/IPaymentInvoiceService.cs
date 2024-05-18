@@ -18,16 +18,16 @@ namespace RentalOfPremises.Services.Contracts.Interface
         /// <summary>
         /// Добавляет новую <see cref="PaymentInvoiceModel"/>
         /// </summary>
-        Task<PaymentInvoiceModel> AddAsync(PaymentInvoiceRequestModel paymentInvoice, string login, CancellationToken cancellationToken);
+        Task<PaymentInvoiceModel> AddAsync(PaymentInvoiceRequestModel paymentInvoice, CancellationToken cancellationToken);
 
         /// <summary>
         /// Редактирует существующую <see cref="PaymentInvoiceModel"/>
         /// </summary>
-        Task<PaymentInvoiceModel> EditAsync(PaymentInvoiceRequestModel source, string login, CancellationToken cancellationToken);
+        Task<PaymentInvoiceModel> EditAsync(PaymentInvoiceRequestModel source, CancellationToken cancellationToken);
 
         /// <summary>
         /// Удаляет существующую <see cref="PaymentInvoiceModel"/>
         /// </summary>
-        Task DeleteAsync(Guid id, string login, CancellationToken cancellationToken);
+        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
     }
 }

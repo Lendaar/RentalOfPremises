@@ -56,14 +56,14 @@ namespace RentalOfPremises.Api.Controllers
         /// <summary>
         /// Создаёт новое User
         /// </summary>
-        [HttpPost]
+        [HttpPost, Authorize]
         [ApiOk(typeof(UserResponse))]
         [ApiConflict]
         public async Task<IActionResult> Create(CreateUserRequest request, CancellationToken cancellationToken)
         {
             await validatorService.ValidateAsync(request, cancellationToken);
             var userRequestModel = mapper.Map<UserRequestModel>(request);
-            var result = await userService.AddAsync(userRequestModel, User?.Identity?.Name, cancellationToken);
+            var result = await userService.AddAsync(userRequestModel, cancellationToken);
             return Ok(mapper.Map<UserResponse>(result));
         }
 
@@ -78,7 +78,7 @@ namespace RentalOfPremises.Api.Controllers
         {
             await validatorService.ValidateAsync(request, cancellationToken);
             var model = mapper.Map<UserRequestModel>(request);
-            var result = await userService.EditAsync(model, User?.Identity?.Name, cancellationToken);
+            var result = await userService.EditAsync(model, cancellationToken);
             return Ok(mapper.Map<UserResponse>(result));
         }
 
@@ -91,7 +91,7 @@ namespace RentalOfPremises.Api.Controllers
         [ApiNotAcceptable]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
-            await userService.DeleteAsync(id, User?.Identity?.Name, cancellationToken);
+            await userService.DeleteAsync(id, cancellationToken);
             return Ok();
         }
     }

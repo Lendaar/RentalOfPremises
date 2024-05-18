@@ -101,7 +101,7 @@ namespace RentalOfPremises.Api.Controllers
         {
             await validatorService.ValidateAsync(request, cancellationToken);
             var contractRequestModel = mapper.Map<ContractRequestModel>(request);
-            var result = await contractService.AddAsync(contractRequestModel, User?.Identity?.Name, cancellationToken);
+            var result = await contractService.AddAsync(contractRequestModel, cancellationToken);
             return Ok(mapper.Map<ContractResponse>(result));
         }
 
@@ -116,7 +116,7 @@ namespace RentalOfPremises.Api.Controllers
         {
             await validatorService.ValidateAsync(request, cancellationToken);
             var model = mapper.Map<ContractRequestModel>(request);
-            var result = await contractService.EditAsync(model, User?.Identity?.Name, cancellationToken);
+            var result = await contractService.EditAsync(model, cancellationToken);
             return Ok(mapper.Map<ContractResponse>(result));
         }
 
@@ -129,7 +129,7 @@ namespace RentalOfPremises.Api.Controllers
         [ApiNotAcceptable]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
-            await contractService.DeleteAsync(id, User?.Identity?.Name, cancellationToken);
+            await contractService.DeleteAsync(id, cancellationToken);
             return Ok();
         }
     }

@@ -46,7 +46,7 @@ namespace RentalOfPremises.Services.Implementations
             return mapper.Map<UserModel>(item);
         }
 
-        async Task<UserModel> IUserService.AddAsync(UserRequestModel user, string login, CancellationToken cancellationToken)
+        async Task<UserModel> IUserService.AddAsync(UserRequestModel user, CancellationToken cancellationToken)
         {
             var item = new User
             {
@@ -55,12 +55,12 @@ namespace RentalOfPremises.Services.Implementations
                 PasswordUser = BCrypt.Net.BCrypt.HashPassword(user.PasswordUser),
                 RoleUser = (RoleTypes)user.RoleUser,
             };
-            userWriteRepository.Add(item, login);
+            userWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             return mapper.Map<UserModel>(item);
         }
 
-        async Task<UserModel> IUserService.EditAsync(UserRequestModel source, string login, CancellationToken cancellationToken)
+        async Task<UserModel> IUserService.EditAsync(UserRequestModel source, CancellationToken cancellationToken)
         {
             var targetUser = await userReadRepository.GetByIdAsync(source.Id, cancellationToken);
             if (targetUser == null)
@@ -72,12 +72,12 @@ namespace RentalOfPremises.Services.Implementations
             targetUser.PasswordUser = BCrypt.Net.BCrypt.HashPassword(source.PasswordUser);
             targetUser.RoleUser = (RoleTypes)source.RoleUser;
 
-            userWriteRepository.Update(targetUser, login);
+            userWriteRepository.Update(targetUser);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             return mapper.Map<UserModel>(targetUser);
         }
 
-        async Task IUserService.DeleteAsync(Guid id, string login, CancellationToken cancellationToken)
+        async Task IUserService.DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             var targetUser = await userReadRepository.GetByIdAsync(id, cancellationToken);
             if (targetUser == null)
@@ -92,7 +92,7 @@ namespace RentalOfPremises.Services.Implementations
                     throw new RentalOfPremisesInvalidOperationException("Невозможно удалить последнего администратора!");
                 }
             }
-            userWriteRepository.Delete(targetUser, login);
+            userWriteRepository.Delete(targetUser);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }

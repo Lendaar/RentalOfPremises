@@ -62,7 +62,7 @@ namespace RentalOfPremises.Api.Controllers
         {
             await validatorService.ValidateAsync(request, cancellationToken);
             var paymentInvoiceRequestModel = mapper.Map<PaymentInvoiceRequestModel>(request);
-            var result = await paymentInvoiceService.AddAsync(paymentInvoiceRequestModel, User?.Identity?.Name, cancellationToken);
+            var result = await paymentInvoiceService.AddAsync(paymentInvoiceRequestModel, cancellationToken);
             return Ok(mapper.Map<PaymentInvoiceResponse>(result));
         }
 
@@ -77,7 +77,7 @@ namespace RentalOfPremises.Api.Controllers
         {
             await validatorService.ValidateAsync(request, cancellationToken);
             var model = mapper.Map<PaymentInvoiceRequestModel>(request);
-            var result = await paymentInvoiceService.EditAsync(model, User?.Identity?.Name, cancellationToken);
+            var result = await paymentInvoiceService.EditAsync(model, cancellationToken);
             return Ok(mapper.Map<PaymentInvoiceResponse>(result));
         }
 
@@ -90,7 +90,7 @@ namespace RentalOfPremises.Api.Controllers
         [ApiNotAcceptable]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
-            await paymentInvoiceService.DeleteAsync(id, User?.Identity?.Name, cancellationToken);
+            await paymentInvoiceService.DeleteAsync(id, cancellationToken);
             return Ok();
         }
     }

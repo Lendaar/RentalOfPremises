@@ -17,16 +17,16 @@ namespace RentalOfPremises.Services.Contracts.Interface
         /// <summary>
         /// Добавляет новую <see cref="RoomModel"/>
         /// </summary>
-        Task<RoomModel> AddAsync(RoomRequestModel course, string login, CancellationToken cancellationToken);
+        Task<RoomModel> AddAsync(RoomRequestModel course, CancellationToken cancellationToken);
 
         /// <summary>
         /// Редактирует существующую <see cref="RoomModel"/>
         /// </summary>
-        Task<RoomModel> EditAsync(RoomRequestModel source, string login, CancellationToken cancellationToken);
+        Task<RoomModel> EditAsync(RoomRequestModel source, CancellationToken cancellationToken);
 
         /// <summary>
         /// Удаляет существующую <see cref="RoomModel"/>
         /// </summary>
-        Task DeleteAsync(Guid id, string login, CancellationToken cancellationToken);
+        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
     }
 }

@@ -18,17 +18,17 @@ namespace RentalOfPremises.Services.Contracts.Interface
         /// <summary>
         /// Добавляет новую <see cref="ContractModel"/>
         /// </summary>
-        Task<ContractModel> AddAsync(ContractRequestModel contract, string login, CancellationToken cancellationToken);
+        Task<ContractModel> AddAsync(ContractRequestModel contract, CancellationToken cancellationToken);
 
         /// <summary>
         /// Редактирует существующую <see cref="ContractModel"/>
         /// </summary>
-        Task<ContractModel> EditAsync(ContractRequestModel source, string login, CancellationToken cancellationToken);
+        Task<ContractModel> EditAsync(ContractRequestModel source, CancellationToken cancellationToken);
 
         /// <summary>
         /// Удаляет существующую <see cref="ContractModel"/>
         /// </summary>
-        Task DeleteAsync(Guid id, string login, CancellationToken cancellationToken);
+        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Формирует документ

@@ -46,7 +46,7 @@ namespace RentalOfPremises.Services.Implementations
             return mapper.Map<RoomModel>(item);
         }
 
-        async Task<RoomModel> IRoomService.AddAsync(RoomRequestModel room, string login, CancellationToken cancellationToken)
+        async Task<RoomModel> IRoomService.AddAsync(RoomRequestModel room, CancellationToken cancellationToken)
         {
             var item = new Room
             {
@@ -57,12 +57,12 @@ namespace RentalOfPremises.Services.Implementations
                 TypeRoom = (PremisesTypes)room.TypeRoom,
                 Occupied = false,
             };
-            roomWriteRepository.Add(item, login);
+            roomWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             return mapper.Map<RoomModel>(item);
         }
 
-        async Task<RoomModel> IRoomService.EditAsync(RoomRequestModel source, string login, CancellationToken cancellationToken)
+        async Task<RoomModel> IRoomService.EditAsync(RoomRequestModel source, CancellationToken cancellationToken)
         {
             var targetRoom = await roomReadRepository.GetByIdAsync(source.Id, cancellationToken);
             if (targetRoom == null)
@@ -76,19 +76,19 @@ namespace RentalOfPremises.Services.Implementations
             targetRoom.TypeRoom = (PremisesTypes)source.TypeRoom;
             targetRoom.Occupied = source.Occupied;
 
-            roomWriteRepository.Update(targetRoom, login);
+            roomWriteRepository.Update(targetRoom);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             return mapper.Map<RoomModel>(targetRoom);
         }
 
-        async Task IRoomService.DeleteAsync(Guid id, string login, CancellationToken cancellationToken)
+        async Task IRoomService.DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             var targetRoom = await roomReadRepository.GetByIdAsync(id, cancellationToken);
             if (targetRoom == null)
             {
                 throw new RentalOfPremisesEntityNotFoundException<Room>(id);
             }
-            roomWriteRepository.Delete(targetRoom, login);
+            roomWriteRepository.Delete(targetRoom);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
