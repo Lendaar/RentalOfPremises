@@ -63,7 +63,6 @@ namespace RentalOfPremises.Api.Controllers
                 PaperSize = PaperKind.A4,
                 Margins = new MarginSettings { Top = 10 },
                 DocumentTitle = "PDF_Contract",
-                Out = $"Договор аренды #{id}.pdf"
             };
             var objectSettings = new ObjectSettings
             {
@@ -76,8 +75,8 @@ namespace RentalOfPremises.Api.Controllers
                 GlobalSettings = globalSettings,
                 Objects = { objectSettings }
             };
-            converter.Convert(pdf);
-            return Ok("yes");
+            var file = converter.Convert(pdf);
+            return File(file, "application/pdf", $"Договор аренды #{id}.pdf");
         }
 
         /// <summary>
