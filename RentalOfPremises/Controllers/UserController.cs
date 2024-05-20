@@ -56,7 +56,7 @@ namespace RentalOfPremises.Api.Controllers
         /// <summary>
         /// Создаёт новое User
         /// </summary>
-        [HttpPost, Authorize]
+        [HttpPost]
         [ApiOk(typeof(UserResponse))]
         [ApiConflict]
         public async Task<IActionResult> Create(CreateUserRequest request, CancellationToken cancellationToken)

@@ -31,7 +31,7 @@ namespace RentalOfPremises.Api.Validators.Tenant
                 .NotEmpty()
                 .WithMessage("Имя директора не должен быть пустым или null")
                 .MaximumLength(50)
-                .WithMessage("Адрес площадки больше 50 символов");
+                .WithMessage("Имя директора больше 50 символов");
 
             RuleFor(x => x.Surname)
                 .NotNull()

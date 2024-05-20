@@ -19,6 +19,20 @@ namespace RentalOfPremises.Api.Validators.User
                 .NotNull()
                 .WithMessage("Id не должно быть пустым или null");
 
+            RuleFor(x => x.Name)
+               .NotNull()
+               .NotEmpty()
+               .WithMessage("Имя не должен быть пустым или null")
+               .MaximumLength(50)
+               .WithMessage("Имя больше 50 символов");
+
+            RuleFor(x => x.Surname)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("Фамилия не должно быть пустым или null")
+                .MaximumLength(50)
+                .WithMessage("Фамилия больше 50 символов");
+
             RuleFor(x => x.LoginUser)
                 .NotNull()
                 .NotEmpty()

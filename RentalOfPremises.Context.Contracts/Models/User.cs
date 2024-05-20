@@ -8,6 +8,21 @@ namespace RentalOfPremises.Context.Contracts.Models
     public class User : BaseAuditEntity
     {
         /// <summary>
+        /// Имя
+        /// </summary>
+        public string Name { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Фамилия
+        /// </summary>
+        public string Surname { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Отчество
+        /// </summary>
+        public string? Patronymic { get; set; }
+
+        /// <summary>
         /// Логин пользователя
         /// </summary>
         public string LoginUser { get; set; } = string.Empty;

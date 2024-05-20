@@ -69,9 +69,9 @@ namespace RentalOfPremises.Context.Migrations
                     Ks = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Bik = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Bank = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Okpo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Ogrn = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Telephone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Okpo = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Ogrn = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Telephone = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
@@ -89,6 +89,9 @@ namespace RentalOfPremises.Context.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Patronymic = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LoginUser = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PasswordUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RoleUser = table.Column<int>(type: "int", nullable: false),
@@ -203,12 +206,32 @@ namespace RentalOfPremises.Context.Migrations
                 name: "IX_Tenant_Inn",
                 table: "Tenants",
                 column: "Inn",
+                unique: true,
                 filter: "DeletedAt is null");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tenants_Ogrn",
+                table: "Tenants",
+                column: "Ogrn",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tenants_Okpo",
+                table: "Tenants",
+                column: "Okpo",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tenants_Telephone",
+                table: "Tenants",
+                column: "Telephone",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_LoginUser",
                 table: "Users",
                 column: "LoginUser",
+                unique: true,
                 filter: "DeletedAt is null");
         }
 

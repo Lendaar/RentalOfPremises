@@ -14,9 +14,12 @@ namespace RentalOfPremises.ContextConfiguration
             builder.Property(x => x.LoginUser).IsRequired();
             builder.Property(x => x.PasswordUser).IsRequired();
             builder.Property(x => x.RoleUser).IsRequired();
+            builder.Property(x => x.Name).IsRequired();
+            builder.Property(x => x.Surname).IsRequired();
             builder.HasIndex(x => x.LoginUser)
                 .HasFilter($"{nameof(User.DeletedAt)} is null")
                 .HasDatabaseName($"IX_{nameof(User)}_{nameof(User.LoginUser)}");
+            builder.HasIndex(x => x.LoginUser).IsUnique();
         }
     }
 }

@@ -51,6 +51,9 @@ namespace RentalOfPremises.Services.Implementations
             var item = new User
             {
                 Id = Guid.NewGuid(),
+                Name = user.Name,
+                Surname = user.Surname,
+                Patronymic = user.Patronymic,
                 LoginUser = user.LoginUser,
                 PasswordUser = BCrypt.Net.BCrypt.HashPassword(user.PasswordUser),
                 RoleUser = (RoleTypes)user.RoleUser,
@@ -71,6 +74,9 @@ namespace RentalOfPremises.Services.Implementations
             targetUser.LoginUser = source.LoginUser;
             targetUser.PasswordUser = BCrypt.Net.BCrypt.HashPassword(source.PasswordUser);
             targetUser.RoleUser = (RoleTypes)source.RoleUser;
+            targetUser.Name = source.Name;
+            targetUser.Surname = source.Surname;
+            targetUser.Patronymic = source.Patronymic;
 
             userWriteRepository.Update(targetUser);
             await unitOfWork.SaveChangesAsync(cancellationToken);

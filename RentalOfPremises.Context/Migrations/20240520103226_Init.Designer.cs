@@ -12,7 +12,7 @@ using RentalOfPremises.Context;
 namespace RentalOfPremises.Context.Migrations
 {
     [DbContext(typeof(RentalOfPremisesContext))]
-    [Migration("20240515140320_Init")]
+    [Migration("20240520103226_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -295,11 +295,11 @@ namespace RentalOfPremises.Context.Migrations
 
                     b.Property<string>("Ogrn")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Okpo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Patronymic")
                         .HasColumnType("nvarchar(max)");
@@ -314,7 +314,7 @@ namespace RentalOfPremises.Context.Migrations
 
                     b.Property<string>("Telephone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -334,8 +334,18 @@ namespace RentalOfPremises.Context.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Inn")
+                        .IsUnique()
                         .HasDatabaseName("IX_Tenant_Inn")
                         .HasFilter("DeletedAt is null");
+
+                    b.HasIndex("Ogrn")
+                        .IsUnique();
+
+                    b.HasIndex("Okpo")
+                        .IsUnique();
+
+                    b.HasIndex("Telephone")
+                        .IsUnique();
 
                     b.ToTable("Tenants", (string)null);
                 });
@@ -361,12 +371,23 @@ namespace RentalOfPremises.Context.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PasswordUser")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Patronymic")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("RoleUser")
                         .HasColumnType("int");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
@@ -379,6 +400,7 @@ namespace RentalOfPremises.Context.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("LoginUser")
+                        .IsUnique()
                         .HasDatabaseName("IX_User_LoginUser")
                         .HasFilter("DeletedAt is null");
 

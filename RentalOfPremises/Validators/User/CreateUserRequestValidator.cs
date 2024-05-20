@@ -14,6 +14,20 @@ namespace RentalOfPremises.Api.Validators.User
         /// </summary>
         public CreateUserRequestValidator(IUserReadRepository userReadRepository)
         {
+            RuleFor(x => x.Name)
+               .NotNull()
+               .NotEmpty()
+               .WithMessage("Имя не должен быть пустым или null")
+               .MaximumLength(50)
+               .WithMessage("Имя больше 50 символов");
+
+            RuleFor(x => x.Surname)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("Фамилия не должно быть пустым или null")
+                .MaximumLength(50)
+                .WithMessage("Фамилия больше 50 символов");
+
             RuleFor(x => x.LoginUser)
                 .NotNull()
                 .NotEmpty()
