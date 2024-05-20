@@ -51,7 +51,7 @@ namespace RentalOfPremises.Api.Controllers
         /// </summary>
         [HttpGet("Document")]
         [ApiOk(typeof(IEnumerable<ContractResponse>))]
-        public async Task<IActionResult> GetDoc([Required] int id, CancellationToken cancellationToken)
+        public async Task<FileContentResult> GetDoc([Required] int id, CancellationToken cancellationToken)
         {
             var path = webHost.WebRootPath + "/Contract_Shablon.html";
             var result = await contractService.GetContractAsync(path, id, cancellationToken);
@@ -62,7 +62,7 @@ namespace RentalOfPremises.Api.Controllers
                 Orientation = Orientation.Portrait,
                 PaperSize = PaperKind.A4,
                 Margins = new MarginSettings { Top = 10 },
-                DocumentTitle = "PDF_Contract",
+                DocumentTitle = $"Dogovor_arends_#{id}",
             };
             var objectSettings = new ObjectSettings
             {
@@ -76,8 +76,12 @@ namespace RentalOfPremises.Api.Controllers
                 Objects = { objectSettings }
             };
             var file = converter.Convert(pdf);
-            return File(file, "application/pdf", $"Договор аренды #{id}.pdf");
+            return new FileContentResult(file, "application/pdf")
+            {
+                FileDownloadName = $"Dogovor_arends_#{id}"
+            };
         }
+
 
         /// <summary>
         /// Получить Contract по идентификатору

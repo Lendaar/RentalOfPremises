@@ -11,12 +11,10 @@ namespace RentalOfPremises.Api.Controllers
     [ApiExplorerSettings(GroupName = "Authorization")]
     public class AuthorizationController : ControllerBase
     {
-        private readonly IUserService userService;
         private readonly ITokenService tokenService;
 
-        public AuthorizationController(IUserService userService, ITokenService tokenService)
+        public AuthorizationController(ITokenService tokenService)
         {
-            this.userService = userService;
             this.tokenService = tokenService;
         }
 
