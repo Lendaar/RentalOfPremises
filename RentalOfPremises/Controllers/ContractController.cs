@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AutoMapper;
-using DinkToPdf;
 using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using RentalOfPremises.Api.Attribute;
@@ -54,34 +53,13 @@ namespace RentalOfPremises.Api.Controllers
         public async Task<FileContentResult> GetDoc([Required] int id, CancellationToken cancellationToken)
         {
             var path = webHost.WebRootPath + "/Contract_Shablon.html";
-            var result = await contractService.GetContractAsync(path, id, cancellationToken);
-
-            var globalSettings = new GlobalSettings
-            {
-                ColorMode = ColorMode.Color,
-                Orientation = Orientation.Portrait,
-                PaperSize = PaperKind.A4,
-                Margins = new MarginSettings { Top = 10 },
-                DocumentTitle = $"Dogovor_arends_#{id}",
-            };
-            var objectSettings = new ObjectSettings
-            {
-                PagesCount = true,
-                HtmlContent = result,
-                WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = null }
-            };
-            var pdf = new HtmlToPdfDocument()
-            {
-                GlobalSettings = globalSettings,
-                Objects = { objectSettings }
-            };
+            var pdf = await contractService.GetContractAsync(path, id, cancellationToken);
             var file = converter.Convert(pdf);
             return new FileContentResult(file, "application/pdf")
             {
-                FileDownloadName = $"Dogovor_arends_#{id}"
+                FileDownloadName = $"Dogovor_arendi_#{id}"
             };
         }
-
 
         /// <summary>
         /// Получить Contract по идентификатору
