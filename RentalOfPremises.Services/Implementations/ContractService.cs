@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DinkToPdf;
 using RentalOfPremises.Common.Entity.InterfaceDB;
 using RentalOfPremises.Repositories.Contracts;
 using RentalOfPremises.Repositories.Contracts.Interface;
@@ -147,7 +148,7 @@ namespace RentalOfPremises.Services.Implementations
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        async Task<string> IContractService.GetContractAsync(string path, int id, CancellationToken cancellationToken)
+        async Task<HtmlToPdfDocument> IContractService.GetContractAsync(string path, int id, CancellationToken cancellationToken)
         {
             var contracts = await contractReadRepository.GetOneContractAsync(id, cancellationToken);
             var roomId = contracts.Select(x => x.RoomId).Distinct();
@@ -240,7 +241,28 @@ namespace RentalOfPremises.Services.Implementations
                 requisites = listContractModel[0].Tenant.Email;
                 text = text.Replace("%email%", requisites);
 
-                return text;
+                var globalSettings = new GlobalSettings
+                {
+                    ColorMode = ColorMode.Color,
+                    Orientation = Orientation.Portrait,
+                    PaperSize = PaperKind.A4,
+                    Margins = new MarginSettings { Top = 10 },
+                    DocumentTitle = $"Dogovor_arends_#{id}",
+                };
+                var objectSettings = new ObjectSettings
+                {
+                    PagesCount = true,
+                    HtmlContent = text,
+                    WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = null }
+                };
+                var pdf = new HtmlToPdfDocument()
+                {
+                    GlobalSettings = globalSettings,
+                    Objects = { objectSettings }
+                };
+
+
+                return pdf;
             }
         }
     }

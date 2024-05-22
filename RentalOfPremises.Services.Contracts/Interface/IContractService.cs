@@ -1,4 +1,5 @@
-﻿using RentalOfPremises.Services.Contracts.Models;
+﻿using DinkToPdf;
+using RentalOfPremises.Services.Contracts.Models;
 using RentalOfPremises.Services.Contracts.RequestModels;
 
 namespace RentalOfPremises.Services.Contracts.Interface
@@ -33,6 +34,6 @@ namespace RentalOfPremises.Services.Contracts.Interface
         /// <summary>
         /// Формирует документ
         /// </summary>
-        Task<string> GetContractAsync(string path, int id, CancellationToken cancellationToken);
+        Task<HtmlToPdfDocument> GetContractAsync(string path, int id, CancellationToken cancellationToken);
     }
 }
