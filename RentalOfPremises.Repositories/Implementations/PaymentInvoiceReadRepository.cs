@@ -18,7 +18,7 @@ namespace RentalOfPremises.Repositories.Implementations
         Task<IReadOnlyCollection<PaymentInvoice>> IPaymentInvoiceReadRepository.GetAllAsync(CancellationToken cancellationToken)
             => reader.Read<PaymentInvoice>()
                 .NotDeletedAt()
-                .OrderBy(x => x.NumberContract)
+                .OrderBy(x => x.CreatedAt)
                 .ToReadOnlyCollectionAsync(cancellationToken);
 
         Task<PaymentInvoice?> IPaymentInvoiceReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -31,7 +31,7 @@ namespace RentalOfPremises.Repositories.Implementations
             => reader.Read<PaymentInvoice>()
                 .NotDeletedAt()
                 .ByIds(ids)
-                .OrderBy(x => x.NumberContract)
+                .OrderBy(x => x.CreatedAt)
                 .ToDictionaryAsync(key => key.Id, cancellation);
 
         Task<bool> IPaymentInvoiceReadRepository.AnyByIdAsync(Guid id, CancellationToken cancellationToken)

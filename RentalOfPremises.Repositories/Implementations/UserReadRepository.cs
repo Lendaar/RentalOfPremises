@@ -19,7 +19,7 @@ namespace RentalOfPremises.Repositories.Implementations
         Task<IReadOnlyCollection<User>> IUserReadRepository.GetAllAsync(CancellationToken cancellationToken)
             => reader.Read<User>()
                 .NotDeletedAt()
-                .OrderBy(x => x.RoleUser)
+                .OrderBy(x => x.CreatedAt)
                 .ToReadOnlyCollectionAsync(cancellationToken);
 
         Task<User?> IUserReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -32,7 +32,7 @@ namespace RentalOfPremises.Repositories.Implementations
              => reader.Read<User>()
                 .NotDeletedAt()
                 .ByIds(ids)
-                .OrderBy(x => x.RoleUser)
+                .OrderBy(x => x.CreatedAt)
                 .ToDictionaryAsync(key => key.Id, cancellation);
 
         Task<bool> IUserReadRepository.AnyByIdAsync(Guid id, CancellationToken cancellationToken)

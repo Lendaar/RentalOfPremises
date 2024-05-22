@@ -20,7 +20,7 @@ namespace RentalOfPremises.Repositories.Implementations
         Task<IReadOnlyCollection<Contract>> IContractReadRepository.GetAllAsync(CancellationToken cancellationToken)
             => reader.Read<Contract>()
                 .NotDeletedAt()
-                .OrderBy(x => x.DateStart)
+                .OrderBy(x => x.CreatedAt)
                 .ToReadOnlyCollectionAsync(cancellationToken);
 
         Task<Contract?> IContractReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -38,7 +38,7 @@ namespace RentalOfPremises.Repositories.Implementations
               => reader.Read<Contract>()
                 .NotDeletedAt()
                 .Where(x => x.DateEnd <= DateTimeOffset.Now)
-                .OrderBy(x => x.DateStart)
+                .OrderBy(x => x.CreatedAt)
                 .ToReadOnlyCollectionAsync(cancellationToken);
     }
 }
