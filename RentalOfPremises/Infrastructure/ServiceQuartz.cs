@@ -14,7 +14,7 @@ namespace RentalOfPremises.Api.Infrastructure
                 options.AddJob<RoomOccupiedJob>(JobKey.Create(nameof(RoomOccupiedJob)))
                 .AddTrigger(trigger => trigger
                     .ForJob(jobKey).WithSimpleSchedule(schedule => schedule
-                        .WithIntervalInHours(1).RepeatForever()));
+                        .WithIntervalInMinutes(10).RepeatForever()));
 
             });
             services.AddQuartzHostedService();
