@@ -77,13 +77,10 @@ namespace RentalOfPremises.Services.Implementations
             targetUser.Surname = source.Surname;
             targetUser.Patronymic = source.Patronymic;
 
-            if (targetUser.RoleUser == RoleTypes.Administrator)
+            var administators = await userReadRepository.GetAllAdministratorsAsync(cancellationToken);
+            if (administators.Count == 1 && targetUser.RoleUser == RoleTypes.Administrator && (RoleTypes)source.RoleUser != RoleTypes.Administrator)
             {
-                var administators = await userReadRepository.GetAllAdministratorsAsync(cancellationToken);
-                if (administators.Count == 1)
-                {
-                    throw new RentalOfPremisesInvalidOperationException("Невозможно изменить роль последнего администратора!");
-                }
+                throw new RentalOfPremisesInvalidOperationException("Невозможно изменить роль последнего администратора!");
             }
             targetUser.RoleUser = (RoleTypes)source.RoleUser;
 
