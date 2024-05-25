@@ -46,6 +46,17 @@ namespace RentalOfPremises.Api.Controllers
         }
 
         /// <summary>
+        /// Получить номер последнего договора
+        /// </summary>
+        [HttpGet("MaxNumber")]
+        [ApiOk]
+        public async Task<IActionResult> GetMaxNumber(CancellationToken cancellationToken)
+        {
+            var result = await contractService.GetMaxNumberAsync(cancellationToken);
+            return Ok(result);
+        }
+
+        /// <summary>
         /// СФормировать договор аренды
         /// </summary>
         [HttpGet("Document")]

@@ -34,11 +34,17 @@ namespace RentalOfPremises.Repositories.Implementations
                 .NotDeletedAt()
                 .Where(x => x.Number == number)
                 .ToReadOnlyCollectionAsync(cancellationToken);
+
         Task<IReadOnlyCollection<Contract>> IContractReadRepository.GetEndContractAsync(CancellationToken cancellationToken)
               => reader.Read<Contract>()
                 .NotDeletedAt()
                 .Where(x => x.DateEnd <= DateTimeOffset.Now)
                 .OrderBy(x => x.CreatedAt)
                 .ToReadOnlyCollectionAsync(cancellationToken);
+
+        Task<int?> IContractReadRepository.GetMaxNumberAsync(CancellationToken cancellationToken)
+              => reader.Read<Contract>()
+                .NotDeletedAt()
+                .MaxAsync(x => (int?)x.Number);
     }
 }

@@ -148,6 +148,20 @@ namespace RentalOfPremises.Services.Implementations
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
+        async Task<int> IContractService.GetMaxNumberAsync(CancellationToken cancellationToken)
+        {
+            var maxNumber = await contractReadRepository.GetMaxNumberAsync(cancellationToken);
+            if (maxNumber == null)
+            {
+                maxNumber = 1;
+            }
+            else
+            {
+                maxNumber++;
+            }
+            return (int)maxNumber;
+        }
+
         async Task<HtmlToPdfDocument> IContractService.GetContractAsync(string path, int id, CancellationToken cancellationToken)
         {
             var contracts = await contractReadRepository.GetOneContractAsync(id, cancellationToken);

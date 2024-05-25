@@ -26,5 +26,10 @@ namespace RentalOfPremises.Repositories.Contracts.Interface
         /// Получить <see cref="Contract"/> у которых сегодня истек срок
         /// </summary>
         Task<IReadOnlyCollection<Contract>> GetEndContractAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить номер последнего <see cref="Contract"/>
+        /// </summary>
+        Task<int?> GetMaxNumberAsync(CancellationToken cancellationToken);
     }
 }

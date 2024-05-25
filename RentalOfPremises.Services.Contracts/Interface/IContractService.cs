@@ -32,6 +32,11 @@ namespace RentalOfPremises.Services.Contracts.Interface
         Task DeleteAsync(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
+        /// Получает номер последнего договора <see cref="ContractModel"/>
+        /// </summary>
+        Task<int> GetMaxNumberAsync(CancellationToken cancellationToken);
+
+        /// <summary>
         /// Формирует документ
         /// </summary>
         Task<HtmlToPdfDocument> GetContractAsync(string path, int id, CancellationToken cancellationToken);
