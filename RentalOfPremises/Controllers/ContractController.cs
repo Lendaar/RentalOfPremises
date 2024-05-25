@@ -66,10 +66,7 @@ namespace RentalOfPremises.Api.Controllers
             var path = webHost.WebRootPath + "/Contract_Shablon.html";
             var pdf = await contractService.GetContractAsync(path, id, cancellationToken);
             var file = converter.Convert(pdf);
-            return new FileContentResult(file, "application/pdf")
-            {
-                FileDownloadName = $"Dogovor_arendi_#{id}"
-            };
+            return new FileContentResult(file, "application/pdf");
         }
 
         /// <summary>

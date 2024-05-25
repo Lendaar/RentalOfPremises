@@ -184,19 +184,17 @@ namespace RentalOfPremises.Services.Implementations
                 }
 
                 var contract = mapper.Map<ContractModel>(contractItem);
-
                 contract.Tenant = mapper.Map<TenantModel>(tenant);
                 contract.Room = mapper.Map<RoomModel>(room);
                 listContractModel.Add(contract);
             }
-
 
             using (StreamReader reader = new StreamReader(path))
             {
                 string text = await reader.ReadToEndAsync();
 
                 text = text.Replace("%number%", listContractModel[0].Number.ToString());
-                var date = $"{listContractModel[0].DateStart.Day}.{listContractModel[0].DateStart.Month}.{listContractModel[0].DateStart.Year} года";
+                var date = $"{listContractModel[0].DateStart.Date.ToShortDateString()} года";
                 text = text.Replace("%date_start%", date);
 
                 var type_tenant = listContractModel[0].Tenant.Type == 0 ? "Юридическое лицо" : "Индивидуальный преприниматель";
@@ -210,16 +208,16 @@ namespace RentalOfPremises.Services.Implementations
                 foreach (var contractModel in listContractModel)
                 {
                     var type = contractModel.Room.TypeRoom == 0 ? "Временное бытовое помещение" : "Cобственное нежилое помещение";
-                    room_text += $"{type} литер {contractModel.Room.Liter} - {contractModel.Room.SquareRoom} м2; ";
+                    room_text += $"{type} литер {contractModel.Room.Liter} - {contractModel.Room.SquareRoom} м²; ";
                     summa += contractModel.Payment * Convert.ToDecimal(contractModel.Room.SquareRoom);
-                    room_price += $"Стоимость 1м2 литер {contractModel.Room.Liter} в месяц {contractModel.Payment} рублей;\n";
+                    room_price += $"Стоимость 1м² литер {contractModel.Room.Liter} в месяц {contractModel.Payment} рублей;\n";
                 }
 
                 text = text.Replace("%rooms%", room_text);
                 text = text.Replace("%all_rooms_prices%", room_price);
                 text = text.Replace("%all_summa%", summa.ToString() + " рублей");
 
-                var date_end = $"{listContractModel[0].DateEnd.Day}.{listContractModel[0].DateEnd.Month}.{listContractModel[0].DateEnd.Year} года.";
+                var date_end = $"{listContractModel[0].DateEnd.Date.ToShortDateString()} года.";
                 text = text.Replace("%date_end%", date_end);
 
                 var requisites = listContractModel[0].Tenant.Inn.ToString();
@@ -261,7 +259,7 @@ namespace RentalOfPremises.Services.Implementations
                     Orientation = Orientation.Portrait,
                     PaperSize = PaperKind.A4,
                     Margins = new MarginSettings { Top = 10 },
-                    DocumentTitle = $"Dogovor_arends_#{id}",
+                    DocumentTitle = $"Договор аренды №{id}",
                 };
                 var objectSettings = new ObjectSettings
                 {
@@ -274,8 +272,6 @@ namespace RentalOfPremises.Services.Implementations
                     GlobalSettings = globalSettings,
                     Objects = { objectSettings }
                 };
-
-
                 return pdf;
             }
         }
