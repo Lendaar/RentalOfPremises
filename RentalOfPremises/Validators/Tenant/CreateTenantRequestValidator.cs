@@ -24,14 +24,14 @@ namespace RentalOfPremises.Api.Validators.Tenant
             RuleFor(x => x.Name)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Имя директора не должен быть пустым или null")
+                .WithMessage("Имя директора не должно быть пустым или null")
                 .MaximumLength(50)
                 .WithMessage("Имя директора больше 50 символов");
 
             RuleFor(x => x.Surname)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Фамилия директора не должно быть пустым или null")
+                .WithMessage("Фамилия директора не должна быть пустым или null")
                 .MaximumLength(50)
                 .WithMessage("Фамилия директора больше 50 символов");
 
@@ -59,7 +59,7 @@ namespace RentalOfPremises.Api.Validators.Tenant
             RuleFor(x => x.Address)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Юридический адрес организации не должно быть пустым или null")
+                .WithMessage("Юридический адрес организации не должен быть пустым или null")
                 .MaximumLength(150)
                 .WithMessage("Юридический адрес организации больше 150 символов");
 
@@ -80,7 +80,7 @@ namespace RentalOfPremises.Api.Validators.Tenant
             RuleFor(x => x.Bik)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("БИК не должно быть пустым или null")
+                .WithMessage("БИК не должен быть пустым или null")
                 .MaximumLength(9)
                 .WithMessage("БИК больше 9 символов");
 
@@ -107,7 +107,7 @@ namespace RentalOfPremises.Api.Validators.Tenant
             RuleFor(x => x.Ogrn)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("ОГРН не должно быть пустым или null")
+                .WithMessage("ОГРН не должен быть пустым или null")
                 .MustAsync(async (ogrn, CancellationToken) =>
                 {
                     var tenantExists = await tenantReadRepository.AnyByOgrnAsync(ogrn, CancellationToken);
@@ -120,7 +120,7 @@ namespace RentalOfPremises.Api.Validators.Tenant
             RuleFor(x => x.Telephone)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Телефон не должно быть пустым или null")
+                .WithMessage("Телефон не должен быть пустым или null")
                 .MustAsync(async (telephone, CancellationToken) =>
                 {
                     var tenantExists = await tenantReadRepository.AnyByTelephoneAsync(telephone, CancellationToken);
@@ -133,7 +133,7 @@ namespace RentalOfPremises.Api.Validators.Tenant
             RuleFor(x => x.Email)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Электронная почта не должен быть пустым или null")
+                .WithMessage("Электронная почта не должна быть пустой или null")
                 .EmailAddress()
                 .WithMessage("Требуется действительная почта!");
         }

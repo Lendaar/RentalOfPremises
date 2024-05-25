@@ -22,21 +22,21 @@ namespace RentalOfPremises.Api.Validators.User
             RuleFor(x => x.Name)
                .NotNull()
                .NotEmpty()
-               .WithMessage("Имя не должен быть пустым или null")
+               .WithMessage("Имя не должно быть пустым или null")
                .MaximumLength(50)
                .WithMessage("Имя больше 50 символов");
 
             RuleFor(x => x.Surname)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Фамилия не должно быть пустым или null")
+                .WithMessage("Фамилия не должна быть пустой или null")
                 .MaximumLength(50)
                 .WithMessage("Фамилия больше 50 символов");
 
             RuleFor(x => x.LoginUser)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Логин не должно быть пустым или null")
+                .WithMessage("Логин не должен быть пустым или null")
                 .Must((x, _) =>
                 {
                     var userExists = userReadRepository.AnyByLoginForChange(x.Id, x.LoginUser);
@@ -63,7 +63,7 @@ namespace RentalOfPremises.Api.Validators.User
 
             RuleFor(x => x.RoleUser)
                 .NotNull()
-                .WithMessage("Роль не должен быть null");
+                .WithMessage("Роль не должна быть null");
         }
     }
 }
