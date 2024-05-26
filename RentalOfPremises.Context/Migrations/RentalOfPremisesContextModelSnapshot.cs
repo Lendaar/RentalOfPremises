@@ -101,15 +101,16 @@ namespace RentalOfPremises.Context.Migrations
                     b.Property<int>("Electricity")
                         .HasColumnType("int");
 
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
                     b.Property<int>("NumberContract")
                         .HasColumnType("int");
 
                     b.Property<int?>("PassGrСar")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("PassLegСar")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int>("PassPerson")

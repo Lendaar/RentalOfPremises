@@ -111,14 +111,15 @@ namespace RentalOfPremises.Context.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Number = table.Column<int>(type: "int", nullable: false),
                     NumberContract = table.Column<int>(type: "int", nullable: false),
                     PeriodPayment = table.Column<int>(type: "int", nullable: false),
                     Electricity = table.Column<int>(type: "int", nullable: false),
                     WaterPl = table.Column<int>(type: "int", nullable: false),
                     WaterMi = table.Column<int>(type: "int", nullable: false),
                     PassPerson = table.Column<int>(type: "int", nullable: false),
-                    PassLegСar = table.Column<int>(type: "int", nullable: false),
-                    PassGrСar = table.Column<int>(type: "int", nullable: false),
+                    PassLegСar = table.Column<int>(type: "int", nullable: true),
+                    PassGrСar = table.Column<int>(type: "int", nullable: true),
                     PriceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),

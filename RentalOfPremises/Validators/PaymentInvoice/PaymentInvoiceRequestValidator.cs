@@ -48,17 +48,6 @@ namespace RentalOfPremises.Api.Validators.PaymentInvoice
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("Кол-во пропусков на человека не должно быть пустым или null");
-
-            RuleFor(x => x.Price)
-                .NotNull()
-                .NotEmpty()
-                .WithMessage("Прейскурант не должен быть пустым или null")
-                .MustAsync(async (id, CancellationToken) =>
-                {
-                    var pricesExists = await priceReadRepository.AnyByIdAsync(id, CancellationToken);
-                    return pricesExists;
-                })
-                .WithMessage("Такого прейскуранта не существует!");
         }
     }
 }

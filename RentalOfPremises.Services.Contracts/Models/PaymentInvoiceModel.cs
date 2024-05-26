@@ -11,6 +11,11 @@
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Номер счета
+        /// </summary>
+        public int Number { get; set; }
+
+        /// <summary>
         /// Номер договора
         /// </summary>
         public int NumberContract { get; set; }

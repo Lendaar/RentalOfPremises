@@ -44,7 +44,6 @@ namespace RentalOfPremises.Repositories.Implementations
 
         Task<int?> IContractReadRepository.GetMaxNumberAsync(CancellationToken cancellationToken)
               => reader.Read<Contract>()
-                .NotDeletedAt()
                 .MaxAsync(x => (int?)x.Number);
     }
 }

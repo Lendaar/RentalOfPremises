@@ -70,9 +70,22 @@ namespace RentalOfPremises.Services.Implementations
 
         async Task<PaymentInvoiceModel> IPaymentInvoiceService.AddAsync(PaymentInvoiceRequestModel payment, CancellationToken cancellationToken)
         {
+            var maxNumber = await paymentInvoiceReadRepository.GetMaxNumberAsync(cancellationToken);
+            if (maxNumber == null)
+            {
+                maxNumber = 1;
+            }
+
+            var price = await priceReadRepository.GetAllAsync(cancellationToken);
+            if (price.Count == 0)
+            {
+                throw new RentalOfPremisesInvalidOperationException("Отсутствует прейскурант!");
+            }
+
             var item = new PaymentInvoice
             {
                 Id = Guid.NewGuid(),
+                Number = (int)(maxNumber + 1),
                 NumberContract = payment.NumberContract,
                 PeriodPayment = payment.PeriodPayment,
                 Electricity = payment.Electricity,
@@ -80,7 +93,8 @@ namespace RentalOfPremises.Services.Implementations
                 WaterMi = payment.WaterMi,
                 PassPerson = payment.PassPerson,
                 PassLegСar = payment.PassLegСar,
-                PriceId = payment.Price
+                PassGrСar = payment.PassGrСar,
+                PriceId = price.Last().Id
             };
 
             paymentInvoiceWriteRepository.Add(item);
@@ -103,6 +117,7 @@ namespace RentalOfPremises.Services.Implementations
             targetPaymentItem.WaterMi = source.WaterMi;
             targetPaymentItem.PassPerson = source.PassPerson;
             targetPaymentItem.PassLegСar = source.PassLegСar;
+            targetPaymentItem.PassGrСar = source.PassGrСar;
 
             var price = await priceReadRepository.GetByIdAsync(source.Price, cancellationToken);
             targetPaymentItem.PriceId = price!.Id;

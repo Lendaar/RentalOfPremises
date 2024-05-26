@@ -12,7 +12,7 @@ using RentalOfPremises.Context;
 namespace RentalOfPremises.Context.Migrations
 {
     [DbContext(typeof(RentalOfPremisesContext))]
-    [Migration("20240520103226_Init")]
+    [Migration("20240526143516_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,15 +103,16 @@ namespace RentalOfPremises.Context.Migrations
                     b.Property<int>("Electricity")
                         .HasColumnType("int");
 
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
                     b.Property<int>("NumberContract")
                         .HasColumnType("int");
 
                     b.Property<int?>("PassGrСar")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("PassLegСar")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int>("PassPerson")
