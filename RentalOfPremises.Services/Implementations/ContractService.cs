@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DinkToPdf;
 using RentalOfPremises.Common.Entity.InterfaceDB;
+using RentalOfPremises.Context.Contracts.Models;
 using RentalOfPremises.Repositories.Contracts;
 using RentalOfPremises.Repositories.Contracts.Interface;
 using RentalOfPremises.Services.Anchors;
@@ -144,6 +145,14 @@ namespace RentalOfPremises.Services.Implementations
             {
                 throw new RentalOfPremisesEntityNotFoundException<Contract>(id);
             }
+
+            var room = await roomReadRepository.GetByIdAsync(targetContractItem.RoomId, cancellationToken);
+            if (targetContractItem == null)
+            {
+                throw new RentalOfPremisesEntityNotFoundException<Room>(targetContractItem.RoomId);
+            }
+            room.Occupied = false;
+            roomWriteRepository.Update(room);
             contractWriteRepository.Delete(targetContractItem);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
