@@ -61,6 +61,8 @@ namespace RentalOfPremises.Api.Infrastructure
             CreateMap<TenantTypes_Services, TenantTypes_Api>()
                 .ConvertUsingEnumMapping(opt => opt.MapByName())
                 .ReverseMap();
+
+            CreateMap<TokenModel, TokenResponse>(MemberList.Destination);
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RentalOfPremises.Api.Models;
 using RentalOfPremises.Services.Contracts.Interface;
 
 namespace RentalOfPremises.Api.Controllers
@@ -12,31 +12,23 @@ namespace RentalOfPremises.Api.Controllers
     public class AuthorizationController : ControllerBase
     {
         private readonly ITokenService tokenService;
+        private readonly IMapper mapper;
 
-        public AuthorizationController(ITokenService tokenService)
+        public AuthorizationController(ITokenService tokenService, IMapper mapper)
         {
             this.tokenService = tokenService;
+            this.mapper = mapper;
         }
 
         /// <summary>
         /// Авторизация пользователя
         /// </summary>
-        [HttpPost("in")]
-        public async Task<string> Auth(string login, string password, CancellationToken cancellationToken)
+        [HttpPost("SignIn")]
+        public async Task<IActionResult> Auth(string login, string password, CancellationToken cancellationToken)
         {
-            var token = await tokenService.Authorization(login, password, cancellationToken);
-            return token;
+            var result = await tokenService.Authorization(login, password, cancellationToken);
+            return Ok(mapper.Map<TokenResponse>(result));
         }
-
-        /// <summary>
-        /// Выход пользователя
-        /// </summary>
-        [HttpPost("ex")]
-        public async void QQQQ(CancellationToken cancellationToken)
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        }
-
 
         [HttpGet, Authorize(Roles = "SeniorEmployee")]
         public async Task<IActionResult> qwe(CancellationToken cancellationToken)

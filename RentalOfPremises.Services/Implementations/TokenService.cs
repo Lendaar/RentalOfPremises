@@ -5,6 +5,7 @@ using RentalOfPremises.Repositories.Contracts.Interface;
 using RentalOfPremises.Services.Anchors;
 using RentalOfPremises.Services.Contracts.Exceptions;
 using RentalOfPremises.Services.Contracts.Interface;
+using RentalOfPremises.Services.Contracts.Models;
 
 namespace RentalOfPremises.Services.Implementations
 {
@@ -17,7 +18,7 @@ namespace RentalOfPremises.Services.Implementations
             this.userReadRepository = userReadRepository;
         }
 
-        async Task<string> ITokenService.Authorization(string login, string password, CancellationToken cancellationToken)
+        async Task<TokenModel> ITokenService.Authorization(string login, string password, CancellationToken cancellationToken)
         {
             var user = await userReadRepository.GetByLoginAsync(login, cancellationToken);
             if (user == null)
@@ -32,7 +33,11 @@ namespace RentalOfPremises.Services.Implementations
                     new Claim(ClaimTypes.Role, user.RoleUser.ToString())
                 };
                 var accessToken = GenerateAccessToken(claims);
-                return accessToken;
+                return new TokenModel
+                {
+                    Token = accessToken,
+                    RoleUser = (Contracts.Enums.RoleTypes)user.RoleUser,
+                };
             }
             throw new RentalOfPremisesInvalidOperationException("USER_NOT_FOUND");
         }
