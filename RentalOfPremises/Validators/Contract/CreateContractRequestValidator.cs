@@ -27,7 +27,9 @@ namespace RentalOfPremises.Api.Validators.Contract
             RuleFor(x => x.DateEnd)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Дата окончания действия договора не должна быть пустой или null");
+                .WithMessage("Дата окончания действия договора не должна быть пустой или null")
+                .Must((x, _) => ((x.DateEnd - x.DateStart).Days / 30 > 0 && (x.DateEnd - x.DateStart).Days / 30 < 12))
+                .WithMessage("Срок действия договора должен быть от 1 до 11 месяцев");
 
             RuleFor(x => x.Tenant)
                 .NotNull()

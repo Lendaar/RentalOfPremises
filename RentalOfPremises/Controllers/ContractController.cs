@@ -57,7 +57,7 @@ namespace RentalOfPremises.Api.Controllers
         }
 
         /// <summary>
-        /// СФормировать договор аренды
+        /// Сформировать договор аренды
         /// </summary>
         [HttpGet("Document")]
         [ApiOk(typeof(IEnumerable<ContractResponse>))]
