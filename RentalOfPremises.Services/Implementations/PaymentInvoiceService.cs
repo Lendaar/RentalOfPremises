@@ -193,6 +193,8 @@ namespace RentalOfPremises.Services.Implementations
                 var text = await reader.ReadToEndAsync();
 
                 var local = listContractModel[0].DateStart.LocalDateTime;
+                var razn = payment.PeriodPayment - local.Month;
+                var year = razn < 0 ? local.Year + 1 : local.Year;
 
                 text = text.Replace("%number%", payment.Number.ToString());
                 text = text.Replace("%date_create%", payment.CreatedAt.Date.ToShortDateString());
@@ -206,8 +208,8 @@ namespace RentalOfPremises.Services.Implementations
 
                 text = text.Replace("%number_contract%", payment.NumberContract.ToString());
                 text = text.Replace("%date_create_contract%", listContractModel[0].DateStart.Date.ToShortDateString());
-                text = text.Replace("%period%", GetElementsFromEnum.PerevodDescription((Months)local.AddMonths(payment.PeriodPayment).Month)
-                    + " " + local.AddMonths(payment.PeriodPayment).Year + " г.");
+                text = text.Replace("%period%", GetElementsFromEnum.PerevodDescription((Months)payment.PeriodPayment)
+                    + " " + year + " г.");
 
                 var summa = 0.0m;
                 text = text.Replace("%electricity%", payment.Electricity.ToString());
@@ -255,8 +257,9 @@ namespace RentalOfPremises.Services.Implementations
                     newString = newString.Replace("%square_room%", contractModel.Room.SquareRoom.ToString());
                     newString = newString.Replace("%payment%", contractModel.Payment.ToString());
 
-                    newString = newString.Replace("%period_start%", local.AddMonths(payment.PeriodPayment - 1).ToShortDateString());
-                    newString = newString.Replace("%period_end%", local.AddMonths(payment.PeriodPayment).ToShortDateString());
+                    var newYear = razn < 0 ? 1 : 0;
+                    newString = newString.Replace("%period_start%", local.AddMonths(razn - 1).AddYears(newYear).ToShortDateString());
+                    newString = newString.Replace("%period_end%", local.AddMonths(razn).AddYears(newYear).ToShortDateString());
 
                     var sumPayment = contractModel.Payment * Convert.ToDecimal(contractModel.Room.SquareRoom);
                     newString = newString.Replace("%summa%", sumPayment.ToString());
