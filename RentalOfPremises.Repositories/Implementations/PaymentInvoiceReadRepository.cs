@@ -43,5 +43,11 @@ namespace RentalOfPremises.Repositories.Implementations
         Task<int?> IPaymentInvoiceReadRepository.GetMaxNumberAsync(CancellationToken cancellationToken)
               => reader.Read<PaymentInvoice>()
                 .MaxAsync(x => (int?)x.Number);
+
+        Task<PaymentInvoice> IPaymentInvoiceReadRepository.GetPaymentInvoiceByNumberAsync(int number, CancellationToken cancellationToken)
+              => reader.Read<PaymentInvoice>()
+                .NotDeletedAt()
+                .Where(x => x.Number == number)
+                .FirstAsync(cancellationToken);
     }
 }

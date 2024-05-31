@@ -31,5 +31,10 @@ namespace RentalOfPremises.Repositories.Contracts.Interface
         /// Получить номер последнего <see cref="PaymentInvoice"/>
         /// </summary>
         Task<int?> GetMaxNumberAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить <see cref="PaymentInvoice"/> по номеру
+        /// </summary>
+        Task<PaymentInvoice> GetPaymentInvoiceByNumberAsync(int number, CancellationToken cancellationToken);
     }
 }

@@ -1,13 +1,19 @@
 ﻿using AutoMapper;
+using AutoMapper.Execution;
+using DinkToPdf;
 using RentalOfPremises.Common.Entity.InterfaceDB;
 using RentalOfPremises.Context.Contracts.Models;
 using RentalOfPremises.Repositories.Contracts;
 using RentalOfPremises.Repositories.Contracts.Interface;
+using RentalOfPremises.Repositories.Implementations;
 using RentalOfPremises.Services.Anchors;
+using RentalOfPremises.Services.Contracts.Enums;
 using RentalOfPremises.Services.Contracts.Exceptions;
 using RentalOfPremises.Services.Contracts.Interface;
 using RentalOfPremises.Services.Contracts.Models;
 using RentalOfPremises.Services.Contracts.RequestModels;
+using RentalOfPremises.Shared;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RentalOfPremises.Services.Implementations
 {
@@ -16,18 +22,27 @@ namespace RentalOfPremises.Services.Implementations
         private readonly IPaymentInvoiceReadRepository paymentInvoiceReadRepository;
         private readonly IPaymentInvoiceWriteRepository paymentInvoiceWriteRepository;
         private readonly IPriceReadRepository priceReadRepository;
+        private readonly ITenantReadRepository tenantReadRepository;
+        private readonly IRoomReadRepository roomReadRepository;
+        private readonly IContractReadRepository contractReadRepository;
         private readonly IMapper mapper;
         private readonly IUnitOfWork unitOfWork;
 
         public PaymentInvoiceService(IPaymentInvoiceReadRepository paymentInvoiceReadRepository,
             IPriceReadRepository priceReadRepository,
             IPaymentInvoiceWriteRepository paymentInvoiceWriteRepository,
+            IContractReadRepository contractReadRepository,
+            ITenantReadRepository tenantReadRepository,
+            IRoomReadRepository roomReadRepository,
             IUnitOfWork unitOfWork,
             IMapper mapper)
         {
             this.paymentInvoiceReadRepository = paymentInvoiceReadRepository;
             this.priceReadRepository = priceReadRepository;
             this.paymentInvoiceWriteRepository = paymentInvoiceWriteRepository;
+            this.contractReadRepository = contractReadRepository;
+            this.tenantReadRepository = tenantReadRepository;
+            this.roomReadRepository = roomReadRepository;
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
@@ -75,6 +90,10 @@ namespace RentalOfPremises.Services.Implementations
             {
                 maxNumber = 1;
             }
+            else
+            {
+                maxNumber++;
+            }
 
             var price = await priceReadRepository.GetAllAsync(cancellationToken);
             if (price.Count == 0)
@@ -85,7 +104,7 @@ namespace RentalOfPremises.Services.Implementations
             var item = new PaymentInvoice
             {
                 Id = Guid.NewGuid(),
-                Number = (int)(maxNumber + 1),
+                Number = (int)(maxNumber),
                 NumberContract = payment.NumberContract,
                 PeriodPayment = payment.PeriodPayment,
                 Electricity = payment.Electricity,
@@ -137,6 +156,138 @@ namespace RentalOfPremises.Services.Implementations
             }
             paymentInvoiceWriteRepository.Delete(targetPaymentItem);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+
+        async Task<HtmlToPdfDocument> IPaymentInvoiceService.GetPaymentInvoiceAsync(string path, int id, CancellationToken cancellationToken)
+        {
+            var payment = await paymentInvoiceReadRepository.GetPaymentInvoiceByNumberAsync(id, cancellationToken);
+            var price = await priceReadRepository.GetByIdAsync(payment.PriceId, cancellationToken);
+
+            var contracts = await contractReadRepository.GetOneContractAsync(payment.NumberContract, cancellationToken);
+            var roomId = contracts.Select(x => x.RoomId).Distinct();
+            var tenantId = contracts.Select(x => x.TenantId).Distinct();
+            var rooms = await roomReadRepository.GetByIdsAsync(roomId, cancellationToken);
+            var tenants = await tenantReadRepository.GetByIdsAsync(tenantId, cancellationToken);
+
+            var listContractModel = new List<ContractModel>();
+            foreach (var contractItem in contracts)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                if (!rooms.TryGetValue(contractItem.RoomId, out var room))
+                {
+                    continue;
+                }
+                if (!tenants.TryGetValue(contractItem.TenantId, out var tenant))
+                {
+                    continue;
+                }
+
+                var contract = mapper.Map<ContractModel>(contractItem);
+                contract.Tenant = mapper.Map<TenantModel>(tenant);
+                contract.Room = mapper.Map<RoomModel>(room);
+                listContractModel.Add(contract);
+            }
+
+            using (StreamReader reader = new StreamReader(path + "/Payment_Shablon.html"))
+            {
+                var text = await reader.ReadToEndAsync();
+
+                var local = listContractModel[0].DateStart.LocalDateTime;
+
+                text = text.Replace("%number%", payment.Number.ToString());
+                text = text.Replace("%date_create%", payment.CreatedAt.Date.ToShortDateString());
+
+                var type_tenant = listContractModel[0].Tenant.Type == 0 ? "Юридическое лицо" : "Индивидуальный преприниматель";
+                text = text.Replace("%type_tenant%", type_tenant);
+                text = text.Replace("%title_tenant%", $"{listContractModel[0].Tenant.Title}");
+                text = text.Replace("%inn_tenant%", listContractModel[0].Tenant.Inn);
+                text = text.Replace("%kpp_tenant%", listContractModel[0].Tenant.Type == 0 ? $" КПП {listContractModel[0].Tenant.Kpp}," : string.Empty);
+                text = text.Replace("%address_tenant%", listContractModel[0].Tenant.Address);
+
+                text = text.Replace("%number_contract%", payment.NumberContract.ToString());
+                text = text.Replace("%date_create_contract%", listContractModel[0].DateStart.Date.ToShortDateString());
+                text = text.Replace("%period%", GetElementsFromEnum.PerevodDescription((Months)local.AddMonths(payment.PeriodPayment).Month)
+                    + " " + local.AddMonths(payment.PeriodPayment).Year + " г.");
+
+                var summa = 0.0m;
+                text = text.Replace("%electricity%", payment.Electricity.ToString());
+                text = text.Replace("%electricity_price%", price.Electricity.ToString());
+                text = text.Replace("%electricity_summa%", (payment.Electricity * price.Electricity).ToString());
+                summa += payment.Electricity * price.Electricity;
+
+                text = text.Replace("%waterPl%", payment.WaterPl.ToString());
+                text = text.Replace("%waterPl_price%", price.WaterPl.ToString());
+                text = text.Replace("%waterPl_summa%", (payment.WaterPl * price.WaterPl).ToString());
+                summa += payment.WaterPl * price.WaterPl;
+
+                text = text.Replace("%waterMi%", payment.WaterMi.ToString());
+                text = text.Replace("%waterMi_price%", price.WaterMi.ToString());
+                text = text.Replace("%waterMi_summa%", (payment.WaterMi * price.WaterMi).ToString());
+                summa += payment.WaterMi * price.WaterMi;
+
+                text = text.Replace("%passPerson%", payment.PassPerson.ToString());
+                text = text.Replace("%passPerson_price%", price.PassPerson.ToString());
+                text = text.Replace("%passPerson_summa%", (payment.PassPerson * price.PassPerson).ToString());
+                summa += payment.PassPerson * price.PassPerson;
+
+                text = text.Replace("%passLegСar%", payment.PassLegСar.ToString());
+                text = text.Replace("%passLegСar_price%", price.PassLegСar.ToString());
+                text = text.Replace("%passLegСar_summa%", (payment.PassLegСar * price.PassLegСar).ToString());
+                summa += Convert.ToDecimal(payment.PassLegСar * price.PassLegСar);
+
+                text = text.Replace("%passGrСar%", payment.PassGrСar.ToString());
+                text = text.Replace("%passGrСar_price%", price.PassGrСar.ToString());
+                text = text.Replace("%passGrСar_summa%", (payment.PassGrСar * price.PassGrСar).ToString());
+                summa += Convert.ToDecimal(payment.PassGrСar * price.PassGrСar);
+
+                var strInTable = string.Empty;
+                using (StreamReader streamReader = new StreamReader(path + "/str_table.html"))
+                {
+                    strInTable = await streamReader.ReadToEndAsync();
+                }
+                var allStringsWithRooms = string.Empty;
+                var position = 7;
+
+                foreach (var contractModel in listContractModel)
+                {
+                    var newString = strInTable;
+                    newString = newString.Replace("%position%", position.ToString());
+                    newString = newString.Replace("%square_room%", contractModel.Room.SquareRoom.ToString());
+                    newString = newString.Replace("%payment%", contractModel.Payment.ToString());
+
+                    newString = newString.Replace("%period_start%", local.AddMonths(payment.PeriodPayment - 1).ToShortDateString());
+                    newString = newString.Replace("%period_end%", local.AddMonths(payment.PeriodPayment).ToShortDateString());
+
+                    var sumPayment = contractModel.Payment * Convert.ToDecimal(contractModel.Room.SquareRoom);
+                    newString = newString.Replace("%summa%", sumPayment.ToString());
+                    allStringsWithRooms += newString;
+                    summa += sumPayment;
+                    position++;
+                }
+                text = text.Replace("%all_summa%", summa.ToString() + " рублей");
+                text = text.Replace("%rooms%", allStringsWithRooms);
+
+                var globalSettings = new GlobalSettings
+                {
+                    ColorMode = ColorMode.Color,
+                    Orientation = Orientation.Portrait,
+                    PaperSize = PaperKind.A4,
+                    Margins = new MarginSettings { Top = 10 },
+                    DocumentTitle = $"Счет на оплату №{id}",
+                };
+                var objectSettings = new ObjectSettings
+                {
+                    PagesCount = true,
+                    HtmlContent = text,
+                    WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = null }
+                };
+                var pdf = new HtmlToPdfDocument()
+                {
+                    GlobalSettings = globalSettings,
+                    Objects = { objectSettings }
+                };
+                return pdf;
+            }
         }
     }
 }

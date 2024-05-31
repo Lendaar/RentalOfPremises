@@ -23,7 +23,7 @@ namespace RentalOfPremises.Services.Implementations
             var user = await userReadRepository.GetByLoginAsync(login, cancellationToken);
             if (user == null)
             {
-                throw new RentalOfPremisesInvalidOperationException("USER_NOT_FOUND");
+                throw new RentalOfPremisesInvalidOperationException("Неверный логин или пароль!");
             }
             if (BCrypt.Net.BCrypt.Verify(password, user.PasswordUser))
             {
@@ -39,7 +39,7 @@ namespace RentalOfPremises.Services.Implementations
                     RoleUser = (Contracts.Enums.RoleTypes)user.RoleUser,
                 };
             }
-            throw new RentalOfPremisesInvalidOperationException("USER_NOT_FOUND");
+            throw new RentalOfPremisesInvalidOperationException("Неверный логин или пароль!");
         }
 
         public string GenerateAccessToken(IEnumerable<Claim> claims)
