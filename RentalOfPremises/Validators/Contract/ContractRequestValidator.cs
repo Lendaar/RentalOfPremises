@@ -22,27 +22,29 @@ namespace RentalOfPremises.Api.Validators.Contract
             RuleFor(x => x.Number)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Номер договора не должно быть пустым или null");
+                .WithMessage("Номер договора не должен быть пустым или null");
 
             RuleFor(x => x.Payment)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Платеж не должно быть пустым или null");
+                .WithMessage("Платеж не должен быть пустым или null");
 
             RuleFor(x => x.DateStart)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Дата начала действия договора не должен быть пустым или null");
+                .WithMessage("Дата начала действия договора не должна быть пустым или null");
 
             RuleFor(x => x.DateEnd)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Дата окончания действия договора не должна быть пустой или null");
+                .WithMessage("Дата окончания действия договора не должна быть пустой или null")
+                .Must((x, _) => ((x.DateEnd - x.DateStart).Days / 30 > 0 && (x.DateEnd - x.DateStart).Days / 30 < 12))
+                .WithMessage("Срок действия договора должен быть от 1 до 11 месяцев");
 
             RuleFor(x => x.Tenant)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Арендатор не должна быть пустым или null")
+                .WithMessage("Арендатор не должен быть пустым или null")
                 .MustAsync(async (id, CancellationToken) =>
                 {
                     var tenantsExists = await tenantReadRepository.AnyByIdAsync(id, CancellationToken);
@@ -53,7 +55,7 @@ namespace RentalOfPremises.Api.Validators.Contract
             RuleFor(x => x.Room)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Помещение не должна быть пустым или null")
+                .WithMessage("Помещение не должно быть пустым или null")
                 .MustAsync(async (id, CancellationToken) =>
                 {
                     var roomsExists = await roomReadRepository.AnyByIdAsync(id, CancellationToken);

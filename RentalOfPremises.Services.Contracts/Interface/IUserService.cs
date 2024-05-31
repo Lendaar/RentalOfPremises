@@ -1,4 +1,5 @@
-﻿using RentalOfPremises.Services.Contracts.Models;
+﻿using RentalOfPremises.Services.Contracts.Enums;
+using RentalOfPremises.Services.Contracts.Models;
 using RentalOfPremises.Services.Contracts.RequestModels;
 
 namespace RentalOfPremises.Services.Contracts.Interface

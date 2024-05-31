@@ -21,5 +21,15 @@ namespace RentalOfPremises.Repositories.Contracts.Interface
         /// Получить <see cref="Contract"/> по относящихся к одному договору
         /// </summary>
         Task<IReadOnlyCollection<Contract>> GetOneContractAsync(int number, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить <see cref="Contract"/> у которых сегодня истек срок
+        /// </summary>
+        Task<IReadOnlyCollection<Contract>> GetEndContractAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить номер последнего <see cref="Contract"/>
+        /// </summary>
+        Task<int?> GetMaxNumberAsync(CancellationToken cancellationToken);
     }
 }

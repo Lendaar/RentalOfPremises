@@ -3,6 +3,8 @@ using RentalOfPremises.Common.Entity.Repositories;
 using RentalOfPremises.Context.Contracts.Models;
 using RentalOfPremises.Repositories.Contracts.Interface;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.PortableExecutable;
+using System.Threading;
 
 namespace RentalOfPremises.Repositories.Implementations
 {
@@ -18,7 +20,7 @@ namespace RentalOfPremises.Repositories.Implementations
         Task<IReadOnlyCollection<Contract>> IContractReadRepository.GetAllAsync(CancellationToken cancellationToken)
             => reader.Read<Contract>()
                 .NotDeletedAt()
-                .OrderBy(x => x.DateStart)
+                .OrderBy(x => x.CreatedAt)
                 .ToReadOnlyCollectionAsync(cancellationToken);
 
         Task<Contract?> IContractReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -32,5 +34,16 @@ namespace RentalOfPremises.Repositories.Implementations
                 .NotDeletedAt()
                 .Where(x => x.Number == number)
                 .ToReadOnlyCollectionAsync(cancellationToken);
+
+        Task<IReadOnlyCollection<Contract>> IContractReadRepository.GetEndContractAsync(CancellationToken cancellationToken)
+              => reader.Read<Contract>()
+                .NotDeletedAt()
+                .Where(x => x.DateEnd <= DateTimeOffset.Now)
+                .OrderBy(x => x.CreatedAt)
+                .ToReadOnlyCollectionAsync(cancellationToken);
+
+        Task<int?> IContractReadRepository.GetMaxNumberAsync(CancellationToken cancellationToken)
+              => reader.Read<Contract>()
+                .MaxAsync(x => (int?)x.Number);
     }
 }

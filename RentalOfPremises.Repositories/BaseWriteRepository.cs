@@ -62,7 +62,7 @@ namespace RentalOfPremises.Repositories
             if (entity is IEntityAuditCreated auditCreated)
             {
                 auditCreated.CreatedAt = writerContext.DateTimeProvider.UtcNow;
-                auditCreated.CreatedBy = writerContext.UserName;
+                auditCreated.CreatedBy = writerContext.IdentityProvider.Name;
             }
         }
 
@@ -71,7 +71,7 @@ namespace RentalOfPremises.Repositories
             if (entity is IEntityAuditUpdated auditUpdate)
             {
                 auditUpdate.UpdatedAt = writerContext.DateTimeProvider.UtcNow;
-                auditUpdate.UpdatedBy = writerContext.UserName;
+                auditUpdate.UpdatedBy = writerContext.IdentityProvider.Name;
             }
         }
 

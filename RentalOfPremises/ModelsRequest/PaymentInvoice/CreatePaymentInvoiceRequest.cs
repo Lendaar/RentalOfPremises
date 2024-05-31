@@ -44,10 +44,5 @@
         /// Кол-во пропусков на грузовую машину
         /// </summary>
         public int PassGrСar { get; set; }
-
-        /// <summary>
-        /// Идентификатор прейскуранта
-        /// </summary>
-        public Guid Price { get; set; }
     }
 }
