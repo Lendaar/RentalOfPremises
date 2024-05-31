@@ -49,5 +49,11 @@ namespace RentalOfPremises.Repositories.Implementations
                 .NotDeletedAt()
                 .Where(x => x.Number == number)
                 .FirstAsync(cancellationToken);
+
+        Task<PaymentInvoice?> IPaymentInvoiceReadRepository.AnyByNumberContractAndPeriodAsync(int number, int period, CancellationToken cancellationToken)
+                => reader.Read<PaymentInvoice>()
+                   .NotDeletedAt()
+                   .Where(x => x.NumberContract == number && x.PeriodPayment == period)
+                   .FirstOrDefaultAsync(cancellationToken);
     }
 }

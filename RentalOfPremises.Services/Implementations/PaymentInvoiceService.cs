@@ -53,11 +53,24 @@ namespace RentalOfPremises.Services.Implementations
             var pricetId = payments.Select(x => x.PriceId).Distinct();
             var prices = await priceReadRepository.GetByIdsAsync(pricetId, cancellationToken);
 
+            List<Contract> contractsInPayments = new List<Contract>();
+            foreach (var payment in payments)
+            {
+                var contract = await contractReadRepository.GetOneContractAsync(payment.NumberContract, cancellationToken);
+                contractsInPayments.AddRange(contract.ToList());
+            }
+            var contractId = contractsInPayments.Where(x => x.DeletedAt == null).Select(x => x.Number).Distinct();
+            var contracts = await contractReadRepository.GetByIdsAsync(contractId, cancellationToken);
+
             var listPaymentsModel = new List<PaymentInvoiceModel>();
             foreach (var paymentItem in payments)
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 if (!prices.TryGetValue(paymentItem.PriceId, out var price))
+                {
+                    continue;
+                }
+                if (!contracts.Any(x => x.Number == paymentItem.NumberContract))
                 {
                     continue;
                 }
@@ -85,6 +98,12 @@ namespace RentalOfPremises.Services.Implementations
 
         async Task<PaymentInvoiceModel> IPaymentInvoiceService.AddAsync(PaymentInvoiceRequestModel payment, CancellationToken cancellationToken)
         {
+            var valid = await paymentInvoiceReadRepository.AnyByNumberContractAndPeriodAsync(payment.NumberContract, payment.PeriodPayment, cancellationToken);
+            if (valid != null)
+            {
+                throw new RentalOfPremisesInvalidOperationException("Счет для оплаты к договору с этим номером и периодом оплаты уже существует");
+            }
+
             var maxNumber = await paymentInvoiceReadRepository.GetMaxNumberAsync(cancellationToken);
             if (maxNumber == null)
             {

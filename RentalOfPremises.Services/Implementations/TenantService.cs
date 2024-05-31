@@ -4,6 +4,7 @@ using RentalOfPremises.Context.Contracts.Enums;
 using RentalOfPremises.Context.Contracts.Models;
 using RentalOfPremises.Repositories.Contracts;
 using RentalOfPremises.Repositories.Contracts.Interface;
+using RentalOfPremises.Repositories.Implementations;
 using RentalOfPremises.Services.Anchors;
 using RentalOfPremises.Services.Contracts.Exceptions;
 using RentalOfPremises.Services.Contracts.Interface;
@@ -16,18 +17,30 @@ namespace RentalOfPremises.Services.Implementations
     {
         private readonly ITenantReadRepository tenantReadRepository;
         private readonly ITenantWriteRepository tenantWriteRepository;
+        private readonly IContractReadRepository contractReadRepository;
+        private readonly IContractWriteRepository contractWriteRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly IRoomReadRepository roomReadRepository;
+        private readonly IRoomWriteRepository roomWriteRepository;
 
         public TenantService(ITenantReadRepository tenantReadRepository,
             IMapper mapper,
             ITenantWriteRepository tenantWriteRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IContractReadRepository contractReadRepository,
+            IContractWriteRepository contractWriteRepository,
+            IRoomReadRepository roomReadRepository,
+            IRoomWriteRepository roomWriteRepository)
         {
             this.tenantReadRepository = tenantReadRepository;
             this.tenantWriteRepository = tenantWriteRepository;
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.contractReadRepository = contractReadRepository;
+            this.contractWriteRepository = contractWriteRepository;
+            this.roomReadRepository = roomReadRepository;
+            this.roomWriteRepository = roomWriteRepository;
         }
 
         async Task<IEnumerable<TenantModel>> ITenantService.GetAllAsync(CancellationToken cancellationToken)
@@ -109,6 +122,18 @@ namespace RentalOfPremises.Services.Implementations
             if (targetTenant == null)
             {
                 throw new RentalOfPremisesEntityNotFoundException<Tenant>(id);
+            }
+
+            var contracts = await contractReadRepository.GetByIdTenantsAsync(id, cancellationToken);
+            foreach (var contract in contracts)
+            {
+                contractWriteRepository.Delete(contract);
+                var room = await roomReadRepository.GetByIdAsync(contract.RoomId, cancellationToken);
+                if (room != null)
+                {
+                    room.Occupied = false;
+                    roomWriteRepository.Update(room);
+                }
             }
             tenantWriteRepository.Delete(targetTenant);
             await unitOfWork.SaveChangesAsync(cancellationToken);

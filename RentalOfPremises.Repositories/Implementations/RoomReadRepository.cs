@@ -39,5 +39,11 @@ namespace RentalOfPremises.Repositories.Implementations
                .NotDeletedAt()
                .ById(id)
                .AnyAsync(cancellationToken);
+
+        Task<Room?> IRoomReadRepository.AnyByLiterAndNumberAsync(string liter, int number, CancellationToken cancellationToken)
+            => reader.Read<Room>()
+               .NotDeletedAt()
+               .Where(x => x.Liter == liter && x.NumberRoom == number)
+               .FirstOrDefaultAsync(cancellationToken);
     }
 }

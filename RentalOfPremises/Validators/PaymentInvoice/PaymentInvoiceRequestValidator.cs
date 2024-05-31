@@ -27,17 +27,17 @@ namespace RentalOfPremises.Api.Validators.PaymentInvoice
             RuleFor(x => x.PeriodPayment)
                .NotNull()
                .NotEmpty()
-               .WithMessage("Почта не должна быть пустой или null");
+               .WithMessage("Период не должен быть пустой или null");
 
             RuleFor(x => x.Electricity)
                .NotNull()
                .NotEmpty()
-               .WithMessage("Потребление электричества не должно быть пустым или null");
+               .WithMessage("Показания электричества не должны быть пустым или null");
 
             RuleFor(x => x.WaterPl)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Потребление воды не должно быть пустым или null");
+                .WithMessage("Показания воды не должны быть пустым или null");
 
             RuleFor(x => x.WaterMi)
                 .NotNull()

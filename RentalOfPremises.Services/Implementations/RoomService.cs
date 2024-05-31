@@ -16,18 +16,24 @@ namespace RentalOfPremises.Services.Implementations
     {
         private readonly IRoomReadRepository roomReadRepository;
         private readonly IRoomWriteRepository roomWriteRepository;
+        private readonly IContractReadRepository contractReadRepository;
+        private readonly IContractWriteRepository contractWriteRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
 
         public RoomService(IRoomReadRepository roomReadRepository,
             IMapper mapper,
             IRoomWriteRepository roomWriteRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IContractReadRepository contractReadRepository,
+            IContractWriteRepository contractWriteRepository)
         {
             this.roomReadRepository = roomReadRepository;
             this.roomWriteRepository = roomWriteRepository;
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.contractReadRepository = contractReadRepository;
+            this.contractWriteRepository = contractWriteRepository;
         }
 
         async Task<IEnumerable<RoomModel>> IRoomService.GetAllAsync(CancellationToken cancellationToken)
@@ -48,6 +54,12 @@ namespace RentalOfPremises.Services.Implementations
 
         async Task<RoomModel> IRoomService.AddAsync(RoomRequestModel room, CancellationToken cancellationToken)
         {
+            var valid = await roomReadRepository.AnyByLiterAndNumberAsync(room.Liter, room.NumberRoom, cancellationToken);
+            if (valid != null)
+            {
+                throw new RentalOfPremisesInvalidOperationException("Помещение с таким литером и номером уже существует");
+            }
+
             var item = new Room
             {
                 Id = Guid.NewGuid(),
@@ -88,6 +100,13 @@ namespace RentalOfPremises.Services.Implementations
             {
                 throw new RentalOfPremisesEntityNotFoundException<Room>(id);
             }
+
+            var contracts = await contractReadRepository.GetByIdRoomsAsync(id, cancellationToken);
+            foreach (var contract in contracts)
+            {
+                contractWriteRepository.Delete(contract);
+            }
+
             roomWriteRepository.Delete(targetRoom);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
