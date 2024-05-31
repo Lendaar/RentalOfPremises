@@ -14,7 +14,6 @@ namespace RentalOfPremises.Api.Infrastructure
                 c.SwaggerDoc("Price", new OpenApiInfo { Title = "Сущность прейскуранта", Version = "v1" });
                 c.SwaggerDoc("PaymentInvoice", new OpenApiInfo { Title = "Сущность счета на оплату", Version = "v1" });
                 c.SwaggerDoc("Contract", new OpenApiInfo { Title = "Сущность договора аренды", Version = "v1" });
-                c.SwaggerDoc("Authorization", new OpenApiInfo { Title = "Авторизация", Version = "v1" });
                 var filePath = Path.Combine(AppContext.BaseDirectory, "RentalOfPremises.Api.xml");
                 c.IncludeXmlComments(filePath);
             });
@@ -29,7 +28,6 @@ namespace RentalOfPremises.Api.Infrastructure
                 x.SwaggerEndpoint("Price/swagger.json", "Прейскуранты");
                 x.SwaggerEndpoint("PaymentInvoice/swagger.json", "Счета на оплату");
                 x.SwaggerEndpoint("Contract/swagger.json", "Договоры аренды");
-                x.SwaggerEndpoint("Authorization/swagger.json", "Авторизация");
             });
         }
     }

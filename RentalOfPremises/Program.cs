@@ -5,9 +5,8 @@ using RentalOfPremises.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.GetAuthentication();
-builder.Services.AddHttpContextAccessor();
 // Add services to the container.
+
 builder.Services.AddControllers(x =>
 {
     x.Filters.Add<RentalOfPremisesExceptionFilter>();
@@ -17,7 +16,6 @@ builder.Services.AddControllers(x =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.GetSwaggerGen();
 builder.Services.AddDependences();
-builder.Services.AddQuartz();
 
 var conString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContextFactory<RentalOfPremisesContext>(options => options.UseSqlServer(conString), ServiceLifetime.Scoped);
@@ -31,11 +29,8 @@ if (app.Environment.IsDevelopment())
     app.GetSwaggerUI();
 }
 
-app.UseStaticFiles();
-
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -16,14 +16,14 @@ namespace RentalOfPremises.Api.Validators.Room
             RuleFor(x => x.Liter)
                  .NotNull()
                  .NotEmpty()
-                 .WithMessage("Литер не должен быть пустым или null")
+                 .WithMessage("Литер не должна быть пустой или null")
                  .MaximumLength(2)
                  .WithMessage("Литер больше 2 символов");
 
             RuleFor(x => x.NumberRoom)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Номер помещения не должен быть пустым или null");
+                .WithMessage("Номер помещения не должно быть пустым или null");
 
             RuleFor(x => x.SquareRoom)
                 .NotNull()
@@ -32,7 +32,7 @@ namespace RentalOfPremises.Api.Validators.Room
 
             RuleFor(x => x.TypeRoom)
                 .NotNull()
-                .WithMessage("Тип помещения не должен быть пустым или null");
+                .WithMessage("Тип помещения не должен быть пустой или null");
         }
     }
 }

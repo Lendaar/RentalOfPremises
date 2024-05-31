@@ -1,5 +1,4 @@
-﻿using DinkToPdf;
-using RentalOfPremises.Services.Contracts.Models;
+﻿using RentalOfPremises.Services.Contracts.Models;
 using RentalOfPremises.Services.Contracts.RequestModels;
 
 namespace RentalOfPremises.Services.Contracts.Interface
@@ -30,10 +29,5 @@ namespace RentalOfPremises.Services.Contracts.Interface
         /// Удаляет существующую <see cref="PaymentInvoiceModel"/>
         /// </summary>
         Task DeleteAsync(Guid id, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Формирует документ
-        /// </summary>
-        Task<HtmlToPdfDocument> GetPaymentInvoiceAsync(string path, int id, CancellationToken cancellationToken);
     }
 }

@@ -6,11 +6,6 @@
     public class PaymentInvoice : BaseAuditEntity
     {
         /// <summary>
-        /// Номер счета
-        /// </summary>
-        public int Number { get; set; }
-
-        /// <summary>
         /// Номер договора
         /// </summary>
         public int NumberContract { get; set; }
