@@ -9,15 +9,11 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.EnumMapping" Version="3.1.0" />
-    <PackageReference Include="DinkToPdf" Version="1.0.8" />
     <PackageReference Include="FluentValidation" Version="11.9.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.9.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
@@ -29,17 +25,5 @@
     <ProjectReference Include="..\RentalOfPremises.Services\RentalOfPremises.Services.csproj" />
     <ProjectReference Include="..\RentalOfPremises.Shared\RentalOfPremises.Shared.csproj" />
   </ItemGroup>
-
-    <ItemGroup>
-        <None Update="libwkhtmltox.dll">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="libwkhtmltox.dylib">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="libwkhtmltox.so">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
 
 </Project>

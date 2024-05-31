@@ -26,25 +26,5 @@ namespace RentalOfPremises.Repositories.Contracts.Interface
         /// Проверка есть ли <see cref="User"/> по указанному id
         /// </summary>
         Task<bool> AnyByIdAsync(Guid id, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Проверка есть ли <see cref="User"/> по указанному логину и паролю
-        /// </summary>
-        Task<User?> GetByLoginAsync(string login, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Получить список всех <see cref="User"/> с ролью администратора
-        /// </summary>
-        Task<IReadOnlyCollection<User>> GetAllAdministratorsAsync(CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Проверка есть ли <see cref="User"/> с указанным логином
-        /// </summary>
-        Task<bool> AnyByLoginAsync(string login, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Проверка есть ли <see cref="User"/> с указанным логином, кроме своего
-        /// </summary>
-        bool AnyByLoginForChange(Guid id, string login);
     }
 }

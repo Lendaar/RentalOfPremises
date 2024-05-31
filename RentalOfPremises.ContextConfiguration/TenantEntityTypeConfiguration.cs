@@ -31,10 +31,6 @@ namespace RentalOfPremises.ContextConfiguration
                 .WithOne(x => x.Tenant)
                 .HasForeignKey(x => x.TenantId)
                 .OnDelete(DeleteBehavior.NoAction);
-            builder.HasIndex(x => x.Inn).IsUnique();
-            builder.HasIndex(x => x.Okpo).IsUnique();
-            builder.HasIndex(x => x.Ogrn).IsUnique();
-            builder.HasIndex(x => x.Telephone).IsUnique();
         }
     }
 }

@@ -18,7 +18,7 @@ namespace RentalOfPremises.Repositories.Implementations
         Task<IReadOnlyCollection<Room>> IRoomReadRepository.GetAllAsync(CancellationToken cancellationToken)
             => reader.Read<Room>()
                .NotDeletedAt()
-               .OrderBy(x => x.CreatedAt)
+               .OrderBy(x => x.Liter)
                .ToReadOnlyCollectionAsync(cancellationToken);
 
         Task<Room?> IRoomReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -31,7 +31,7 @@ namespace RentalOfPremises.Repositories.Implementations
             => reader.Read<Room>()
                .NotDeletedAt()
                .ByIds(ids)
-               .OrderBy(x => x.CreatedAt)
+               .OrderBy(x => x.Liter)
                .ToDictionaryAsync(key => key.Id, cancellation);
 
         Task<bool> IRoomReadRepository.AnyByIdAsync(Guid id, CancellationToken cancellationToken)

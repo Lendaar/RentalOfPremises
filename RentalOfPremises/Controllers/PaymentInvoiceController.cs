@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AutoMapper;
-using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using RentalOfPremises.Api.Attribute;
 using RentalOfPremises.Api.Infrastructures.Validator;
@@ -22,16 +21,12 @@ namespace RentalOfPremises.Api.Controllers
         private readonly IPaymentInvoiceService paymentInvoiceService;
         private readonly IApiValidatorService validatorService;
         private readonly IMapper mapper;
-        private readonly IWebHostEnvironment webHost;
-        private IConverter converter;
 
-        public PaymentInvoiceController(IPaymentInvoiceService paymentInvoiceService, IMapper mapper, IApiValidatorService validatorService, IWebHostEnvironment webHost, IConverter converter)
+        public PaymentInvoiceController(IPaymentInvoiceService paymentInvoiceService, IMapper mapper, IApiValidatorService validatorService)
         {
             this.paymentInvoiceService = paymentInvoiceService;
             this.validatorService = validatorService;
             this.mapper = mapper;
-            this.webHost = webHost;
-            this.converter = converter;
         }
 
         /// <summary>
@@ -46,7 +41,7 @@ namespace RentalOfPremises.Api.Controllers
         }
 
         /// <summary>
-        /// Получить PaymentInvoice по идентификатору
+        /// Получить Работника по PaymentInvoice
         /// </summary>
         [HttpGet("{id:guid}")]
         [ApiOk(typeof(PaymentInvoiceResponse))]
@@ -55,19 +50,6 @@ namespace RentalOfPremises.Api.Controllers
         {
             var item = await paymentInvoiceService.GetByIdAsync(id, cancellationToken);
             return Ok(mapper.Map<PaymentInvoiceResponse>(item));
-        }
-
-        /// <summary>
-        /// Сформировать счет на оплату
-        /// </summary>
-        [HttpGet("Payment")]
-        [ApiOk(typeof(IEnumerable<PaymentInvoiceResponse>))]
-        public async Task<FileContentResult> GetDoc([Required] int id, CancellationToken cancellationToken)
-        {
-            var path = webHost.WebRootPath;
-            var pdf = await paymentInvoiceService.GetPaymentInvoiceAsync(path, id, cancellationToken);
-            var file = converter.Convert(pdf);
-            return new FileContentResult(file, "application/pdf");
         }
 
         /// <summary>

@@ -18,17 +18,16 @@ namespace RentalOfPremises.Api.Infrastructures.Validator
         public ApiValidatorService(
             ITenantReadRepository tenantReadRepository,
             IRoomReadRepository roomReadRepository,
-            IPriceReadRepository priceReadRepository,
-            IUserReadRepository userReadRepository)
+            IPriceReadRepository priceReadRepository)
         {
             Register<CreateContractRequestValidator>(tenantReadRepository, roomReadRepository);
             Register<ContractRequestValidator>(tenantReadRepository, roomReadRepository);
 
-            Register<CreateUserRequestValidator>(userReadRepository);
-            Register<UserRequestValidator>(userReadRepository);
+            Register<CreateUserRequestValidator>();
+            Register<UserRequestValidator>();
 
-            Register<CreateTenantRequestValidator>(tenantReadRepository);
-            Register<TenantRequestValidator>(tenantReadRepository);
+            Register<CreateTenantRequestValidator>();
+            Register<TenantRequestValidator>();
 
             Register<CreateRoomRequestValidator>();
             Register<RoomRequestValidator>();

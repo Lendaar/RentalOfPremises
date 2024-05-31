@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AutoMapper;
-using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using RentalOfPremises.Api.Attribute;
 using RentalOfPremises.Api.Infrastructures.Validator;
@@ -22,16 +21,12 @@ namespace RentalOfPremises.Api.Controllers
         private readonly IContractService contractService;
         private readonly IApiValidatorService validatorService;
         private readonly IMapper mapper;
-        private readonly IWebHostEnvironment webHost;
-        private IConverter converter;
 
-        public ContractController(IContractService contractService, IMapper mapper, IApiValidatorService validatorService, IWebHostEnvironment webHost, IConverter converter)
+        public ContractController(IContractService contractService, IMapper mapper, IApiValidatorService validatorService)
         {
             this.contractService = contractService;
             this.validatorService = validatorService;
             this.mapper = mapper;
-            this.webHost = webHost;
-            this.converter = converter;
         }
 
         /// <summary>
@@ -43,30 +38,6 @@ namespace RentalOfPremises.Api.Controllers
         {
             var result = await contractService.GetAllAsync(cancellationToken);
             return Ok(mapper.Map<IEnumerable<ContractResponse>>(result));
-        }
-
-        /// <summary>
-        /// Получить номер последнего договора
-        /// </summary>
-        [HttpGet("MaxNumber")]
-        [ApiOk]
-        public async Task<IActionResult> GetMaxNumber(CancellationToken cancellationToken)
-        {
-            var result = await contractService.GetMaxNumberAsync(cancellationToken);
-            return Ok(result);
-        }
-
-        /// <summary>
-        /// Сформировать договор аренды
-        /// </summary>
-        [HttpGet("Document")]
-        [ApiOk(typeof(IEnumerable<ContractResponse>))]
-        public async Task<FileContentResult> GetDoc([Required] int id, CancellationToken cancellationToken)
-        {
-            var path = webHost.WebRootPath + "/Contract_Shablon.html";
-            var pdf = await contractService.GetContractAsync(path, id, cancellationToken);
-            var file = converter.Convert(pdf);
-            return new FileContentResult(file, "application/pdf");
         }
 
         /// <summary>
