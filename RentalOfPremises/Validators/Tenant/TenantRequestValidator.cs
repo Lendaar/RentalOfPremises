@@ -1,5 +1,6 @@
-﻿using RentalOfPremises.Api.ModelsRequest.Tenant;
-using FluentValidation;
+﻿using FluentValidation;
+using RentalOfPremises.Api.ModelsRequest.Tenant;
+using RentalOfPremises.Repositories.Contracts.Interface;
 
 namespace RentalOfPremises.Api.Validators.Tenant
 {
@@ -11,7 +12,7 @@ namespace RentalOfPremises.Api.Validators.Tenant
         /// <summary>
         /// Инициализирую <see cref="TenantRequestValidator"/>
         /// </summary>
-        public TenantRequestValidator()
+        public TenantRequestValidator(ITenantReadRepository tenantReadRepository)
         {
             RuleFor(x => x.Id)
                .NotNull()
@@ -28,14 +29,14 @@ namespace RentalOfPremises.Api.Validators.Tenant
             RuleFor(x => x.Name)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Имя директора не должен быть пустым или null")
+                .WithMessage("Имя директора не должно быть пустым или null")
                 .MaximumLength(50)
-                .WithMessage("Адрес площадки больше 50 символов");
+                .WithMessage("Имя директора больше 50 символов");
 
             RuleFor(x => x.Surname)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Фамилия директора не должно быть пустым или null")
+                .WithMessage("Фамилия директора не должна быть пустой или null")
                 .MaximumLength(50)
                 .WithMessage("Фамилия директора больше 50 символов");
 
@@ -47,6 +48,12 @@ namespace RentalOfPremises.Api.Validators.Tenant
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("ИНН не должно быть пустым или null")
+                .Must((x, _) =>
+                {
+                    var tenantExists = tenantReadRepository.AnyByInnForChange(x.Id, x.Inn);
+                    return !tenantExists;
+                })
+                .WithMessage("ИНН не уникален")
                 .MaximumLength(12)
                 .WithMessage("ИНН больше 12 символов");
 
@@ -57,7 +64,7 @@ namespace RentalOfPremises.Api.Validators.Tenant
             RuleFor(x => x.Address)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Юридический адрес организации не должно быть пустым или null")
+                .WithMessage("Юридический адрес организации не должен быть пустым или null")
                 .MaximumLength(150)
                 .WithMessage("Юридический адрес организации больше 150 символов");
 
@@ -78,7 +85,7 @@ namespace RentalOfPremises.Api.Validators.Tenant
             RuleFor(x => x.Bik)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("БИК не должно быть пустым или null")
+                .WithMessage("БИК не должен быть пустым или null")
                 .MaximumLength(9)
                 .WithMessage("БИК больше 9 символов");
 
@@ -93,27 +100,45 @@ namespace RentalOfPremises.Api.Validators.Tenant
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("ОКПО не должен быть пустым или null")
+                .Must((x, _) =>
+                {
+                    var tenantExists = tenantReadRepository.AnyByOkpoForChange(x.Id, x.Okpo);
+                    return !tenantExists;
+                })
+                .WithMessage("ОКПО не уникален")
                 .MaximumLength(10)
                 .WithMessage("ОКПО больше 10 символов");
 
             RuleFor(x => x.Ogrn)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("ОГРН не должно быть пустым или null")
+                .WithMessage("ОГРН не должен быть пустым или null")
+                .Must((x, _) =>
+                {
+                    var tenantExists = tenantReadRepository.AnyByOgrnForChange(x.Id, x.Ogrn);
+                    return !tenantExists;
+                })
+                .WithMessage("ОГРН не уникален")
                 .MaximumLength(15)
                 .WithMessage("ОГРН больше 15 символов");
 
             RuleFor(x => x.Telephone)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Телефон не должно быть пустым или null")
+                .WithMessage("Телефон не должен быть пустым или null")
+                .Must((x, _) =>
+                {
+                    var tenantExists = tenantReadRepository.AnyByTelephoneForChange(x.Id, x.Telephone);
+                    return !tenantExists;
+                })
+                .WithMessage("Телефон не уникален")
                 .MaximumLength(30)
                 .WithMessage("Телефон больше 30 символов");
 
             RuleFor(x => x.Email)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Электронная почта не должен быть пустым или null")
+                .WithMessage("Электронная почта не должна быть пустой или null")
                 .EmailAddress()
                 .WithMessage("Требуется действительная почта!");
         }

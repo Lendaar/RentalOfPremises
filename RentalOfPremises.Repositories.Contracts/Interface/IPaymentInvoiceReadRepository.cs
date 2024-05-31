@@ -26,5 +26,20 @@ namespace RentalOfPremises.Repositories.Contracts.Interface
         /// Проверка есть ли <see cref="PaymentInvoice"/> по указанному id
         /// </summary>
         Task<bool> AnyByIdAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить номер последнего <see cref="PaymentInvoice"/>
+        /// </summary>
+        Task<int?> GetMaxNumberAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить <see cref="PaymentInvoice"/> по номеру
+        /// </summary>
+        Task<PaymentInvoice> GetPaymentInvoiceByNumberAsync(int number, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Проверка есть ли <see cref="Room"/> по указанному литеру и номеру
+        /// </summary>
+        Task<PaymentInvoice?> AnyByNumberContractAndPeriodAsync(int number, int period, CancellationToken cancellationToken);
     }
 }

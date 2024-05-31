@@ -39,5 +39,10 @@
         /// Цена на пропуск на грузовой автомобиль
         /// </summary>
         public decimal PassGrСar { get; set; }
+
+        /// <summary>
+        /// Дата создания
+        /// </summary>
+        public DateTimeOffset CreatedAt { get; set; }
     }
 }

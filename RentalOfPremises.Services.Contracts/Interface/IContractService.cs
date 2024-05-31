@@ -1,4 +1,5 @@
-﻿using RentalOfPremises.Services.Contracts.Models;
+﻿using DinkToPdf;
+using RentalOfPremises.Services.Contracts.Models;
 using RentalOfPremises.Services.Contracts.RequestModels;
 
 namespace RentalOfPremises.Services.Contracts.Interface
@@ -29,5 +30,15 @@ namespace RentalOfPremises.Services.Contracts.Interface
         /// Удаляет существующую <see cref="ContractModel"/>
         /// </summary>
         Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получает номер последнего договора <see cref="ContractModel"/>
+        /// </summary>
+        Task<int> GetMaxNumberAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Формирует документ
+        /// </summary>
+        Task<HtmlToPdfDocument> GetContractAsync(string path, int id, CancellationToken cancellationToken);
     }
 }

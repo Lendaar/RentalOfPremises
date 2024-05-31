@@ -51,8 +51,11 @@ namespace RentalOfPremises.Services.Implementations
             var item = new User
             {
                 Id = Guid.NewGuid(),
+                Name = user.Name,
+                Surname = user.Surname,
+                Patronymic = user.Patronymic,
                 LoginUser = user.LoginUser,
-                PasswordUser = user.PasswordUser,
+                PasswordUser = BCrypt.Net.BCrypt.HashPassword(user.PasswordUser),
                 RoleUser = (RoleTypes)user.RoleUser,
             };
             userWriteRepository.Add(item);
@@ -69,7 +72,16 @@ namespace RentalOfPremises.Services.Implementations
             }
 
             targetUser.LoginUser = source.LoginUser;
-            targetUser.PasswordUser = source.PasswordUser;
+            targetUser.PasswordUser = BCrypt.Net.BCrypt.HashPassword(source.PasswordUser);
+            targetUser.Name = source.Name;
+            targetUser.Surname = source.Surname;
+            targetUser.Patronymic = source.Patronymic;
+
+            var administators = await userReadRepository.GetAllAdministratorsAsync(cancellationToken);
+            if (administators.Count == 1 && targetUser.RoleUser == RoleTypes.Administrator && (RoleTypes)source.RoleUser != RoleTypes.Administrator)
+            {
+                throw new RentalOfPremisesInvalidOperationException("Невозможно изменить роль последнего администратора!");
+            }
             targetUser.RoleUser = (RoleTypes)source.RoleUser;
 
             userWriteRepository.Update(targetUser);
@@ -83,6 +95,14 @@ namespace RentalOfPremises.Services.Implementations
             if (targetUser == null)
             {
                 throw new RentalOfPremisesEntityNotFoundException<User>(id);
+            }
+            if (targetUser.RoleUser == RoleTypes.Administrator)
+            {
+                var administators = await userReadRepository.GetAllAdministratorsAsync(cancellationToken);
+                if (administators.Count == 1)
+                {
+                    throw new RentalOfPremisesInvalidOperationException("Невозможно удалить последнего администратора!");
+                }
             }
             userWriteRepository.Delete(targetUser);
             await unitOfWork.SaveChangesAsync(cancellationToken);

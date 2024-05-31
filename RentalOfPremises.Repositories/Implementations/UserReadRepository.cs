@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RentalOfPremises.Common.Entity.InterfaceDB;
 using RentalOfPremises.Common.Entity.Repositories;
+using RentalOfPremises.Context.Contracts.Enums;
 using RentalOfPremises.Context.Contracts.Models;
 using RentalOfPremises.Repositories.Contracts.Interface;
 
@@ -18,7 +19,7 @@ namespace RentalOfPremises.Repositories.Implementations
         Task<IReadOnlyCollection<User>> IUserReadRepository.GetAllAsync(CancellationToken cancellationToken)
             => reader.Read<User>()
                 .NotDeletedAt()
-                .OrderBy(x => x.RoleUser)
+                .OrderBy(x => x.CreatedAt)
                 .ToReadOnlyCollectionAsync(cancellationToken);
 
         Task<User?> IUserReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -31,7 +32,7 @@ namespace RentalOfPremises.Repositories.Implementations
              => reader.Read<User>()
                 .NotDeletedAt()
                 .ByIds(ids)
-                .OrderBy(x => x.RoleUser)
+                .OrderBy(x => x.CreatedAt)
                 .ToDictionaryAsync(key => key.Id, cancellation);
 
         Task<bool> IUserReadRepository.AnyByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -39,5 +40,27 @@ namespace RentalOfPremises.Repositories.Implementations
                  .NotDeletedAt()
                  .ById(id)
                  .AnyAsync(cancellationToken);
+
+        Task<User?> IUserReadRepository.GetByLoginAsync(string login, CancellationToken cancellationToken)
+             => reader.Read<User>()
+                 .NotDeletedAt()
+                 .Where(x => x.LoginUser == login)
+                 .FirstOrDefaultAsync(cancellationToken);
+
+        Task<IReadOnlyCollection<User>> IUserReadRepository.GetAllAdministratorsAsync(CancellationToken cancellationToken)
+             => reader.Read<User>()
+                 .NotDeletedAt()
+                 .Where(x => x.RoleUser == RoleTypes.Administrator)
+                 .ToReadOnlyCollectionAsync(cancellationToken);
+
+        Task<bool> IUserReadRepository.AnyByLoginAsync(string login, CancellationToken cancellationToken)
+             => reader.Read<User>()
+                 .NotDeletedAt()
+                 .AnyAsync(x => x.LoginUser == login, cancellationToken);
+
+        bool IUserReadRepository.AnyByLoginForChange(Guid id, string login)
+             => reader.Read<User>()
+                 .NotDeletedAt()
+                 .Any(x => x.LoginUser == login && x.Id != id);
     }
 }

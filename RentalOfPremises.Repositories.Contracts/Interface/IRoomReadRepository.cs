@@ -25,5 +25,10 @@ namespace RentalOfPremises.Repositories.Contracts.Interface
         /// Проверка есть ли <see cref="Room"/> по указанному id
         /// </summary>
         Task<bool> AnyByIdAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Проверка есть ли <see cref="Room"/> по указанному литеру и номеру
+        /// </summary>
+        Task<Room?> AnyByLiterAndNumberAsync(string liter, int number, CancellationToken cancellationToken);
     }
 }
